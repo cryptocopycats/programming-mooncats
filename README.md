@@ -1,2 +1,2 @@
-# quickrefs
-Print HTML &amp;CSS Quick References (Cheat Sheets)
+
+Print HTML & CSS Quick References (Cheat Sheets)
