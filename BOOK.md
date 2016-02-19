@@ -1,6 +1,6 @@
 # Book Parts & Techniques
 
-What's missing?
+What's missing in a "plain" web page?
 
 ## Footers & Headers
 
