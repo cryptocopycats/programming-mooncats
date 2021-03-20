@@ -14,7 +14,7 @@ Examples: `0x00000800fa`,
 `0x0077c8278d`, and `0xff5f000ca7`.
 
 The first byte (`byte[0]`)
-tells you if your cat is a one of the 256
+tells you if your cat is one of the 256
 possible released genesis cats (`ff`)
 or a rescued cat (`00`).
 
@@ -24,7 +24,10 @@ to 127 and the most signifiant bit tells you to invert the color palette or not.
 
 Lastly the third, fourth, and fifth bytes
 (`byte[2]`, `byte[3]`, `byte[4]`)
-tell you the red (r), green (g), blue color value - from 0 to 255.
+tell you the red (r), green (g), blue (b) color value - from 0 to 255 - that gets used to derive the color palette, that is, all 5 colors.
+
+Note: For the 256 possible released genesis cats the black / white color palette is "hard-coded" 
+and NOT derived from the red (r), green (g), blue (b) color value.
 
 
 Let's decode the 5-byte id - `0x00000800fa`:
