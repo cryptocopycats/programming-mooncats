@@ -26,7 +26,7 @@ Lastly the third, fourth, and fifth bytes
 (`byte[2]`, `byte[3]`, `byte[4]`)
 tell you the red (r), green (g), blue (b) color value - from 0 to 255 - that gets used to derive the color palette, that is, all 5 colors.
 
-Note: For the 256 possible released genesis cats the black / white color palette is "hard-coded" 
+Note: For the 256 possible released genesis cats the black / white color palette is "hard-coded"
 and NOT derived from the red (r), green (g), blue (b) color value.
 
 
@@ -83,9 +83,9 @@ Standing (21×17), Sleeping (20×14), Pouncing (17×22), Stalking (20×21).
 
 ``` ruby
 
-Mooncats::Image.generate( '0x00000800fa' ).save( './mooncat-00000800fa.png' )
-Mooncats::Image.generate( '0x0077c8278d' ).save( './mooncat-0077c8278d.png' )
-Mooncats::Image.generate( '0xff5f000ca7' ).save( './mooncat-ff5f000ca7.png' )
+Mooncats::Image.mint( '0x00000800fa' ).save( './mooncat-00000800fa.png' )
+Mooncats::Image.mint( '0x0077c8278d' ).save( './mooncat-0077c8278d.png' )
+Mooncats::Image.mint( '0xff5f000ca7' ).save( './mooncat-ff5f000ca7.png' )
 
 ```
 
@@ -101,15 +101,15 @@ Let's change the zoom factor:
 ``` ruby
 # use x2
 
-Mooncats::Image.generate( '0x00000800fa', zoom: 2 ).save( './mooncat-00000800fa_x2.png' )
-Mooncats::Image.generate( '0x0077c8278d', zoom: 2 ).save( './mooncat-0077c8278d_x2.png' )
-Mooncats::Image.generate( '0xff5f000ca7', zoom: 2 ).save( './mooncat-ff5f000ca7_x2.png' )
+Mooncats::Image.mint( '0x00000800fa', zoom: 2 ).save( './mooncat-00000800fa_x2.png' )
+Mooncats::Image.mint( '0x0077c8278d', zoom: 2 ).save( './mooncat-0077c8278d_x2.png' )
+Mooncats::Image.mint( '0xff5f000ca7', zoom: 2 ).save( './mooncat-ff5f000ca7_x2.png' )
 
 # And x4:
 
-Mooncats::Image.generate( '0x00000800fa', zoom: 4 ).save( './mooncat-00000800fa_x4.png' )
-Mooncats::Image.generate( '0x0077c8278d', zoom: 4 ).save( './mooncat-0077c8278d_x4.png' )
-Mooncats::Image.generate( '0xff5f000ca7', zoom: 4 ).save( './mooncat-ff5f000ca7_x4.png' )
+Mooncats::Image.mint( '0x00000800fa', zoom: 4 ).save( './mooncat-00000800fa_x4.png' )
+Mooncats::Image.mint( '0x0077c8278d', zoom: 4 ).save( './mooncat-0077c8278d_x4.png' )
+Mooncats::Image.mint( '0xff5f000ca7', zoom: 4 ).save( './mooncat-ff5f000ca7_x4.png' )
 
 # ...
 ```
