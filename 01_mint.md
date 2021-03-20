@@ -6,7 +6,7 @@ Let's create a script to mint mooncats.
 
 
 
-Step 1:  Inside the On-Chain 5-Bytes IDs
+## Step 1:  Inside the On-Chain 5-Bytes IDs  - Genesis? · Design (Pose / Facing / Face / Fur ) · Inverted Palette? · Red / Green / Blue
 
 
 Let's start with the on-chain 5-byte ids:
@@ -75,8 +75,8 @@ meta.rgb           #=> [200, 39, 141]
 
 Note: By default mooncats get saved in the original ~24×24¹ pixel format.
 
-¹: The 4 different pixel formats approaching 24×24 are really
-- Standing (21×17), Sleeping (20×14), Pouncing (17×22), Stalking (20×21).
+¹: The 4 different pixel formats approaching 24×24 are really -
+Standing (21×17), Sleeping (20×14), Pouncing (17×22), Stalking (20×21).
 
 
 ``` ruby
