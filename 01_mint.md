@@ -19,13 +19,12 @@ possible released genesis cats (`ff`)
 or a rescued cat (`00`).
 
 The second byte (`byte[1]`)
-holds the design - on of 0
+holds the design - one of 0
 to 127 and the most signifiant bit tells you to invert the color palette or not.
 
 Lastly the third, fourth, and fifth bytes
 (`byte[2]`, `byte[3]`, `byte[4]`)
-tell you the red (r), green (g), blue color value
-- from 0 to 255.
+tell you the red (r), green (g), blue color value - from 0 to 255.
 
 
 Let's decode the 5-byte id - `0x00000800fa`:
