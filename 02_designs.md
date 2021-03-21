@@ -6,7 +6,9 @@ original designs in line #6 in the open source
 [`mooncatparser.js`](https://github.com/ponderware/mooncatparser/blob/master/mooncatparser.js#L6) image data generation code.
 
 
-What about the MD5-verifed original design crypto "magic"?
+
+
+Aside: What about the MD5-verifed original design crypto "magic"?
 
 > The MD5 message-digest algorithm is a widely used hash function
 > producing a 128-bit hash value.
@@ -47,7 +49,7 @@ Onwards.
 
 
 
-Back to line #6 in the open source in the
+Back to line #6 in the open source
 [`mooncatparser.js`](https://github.com/ponderware/mooncatparser/blob/master/mooncatparser.js#L6) image data generation code:
 
 ``` js
@@ -70,14 +72,15 @@ var designs = [
 ]
 ```
 
-The `designs` array holds 128 design in four pixel size formats, that is,
-Standing (21×17), Sleeping (20×14), Pouncing (17×22), Stalking (20×21)
+The `designs` array holds 128 designs (from 0 to 127)
+in four pixel size formats, that is,
+21×17 (Standing), 20×14 (Sleeping), 17×22 (Pouncing), 20×21 (Stalking)
 and every design
 has the pixels encoded in five possible colors (`1`,`2`,`3`,`4`,`5`) and zero (`0`) stands for transparent
 and the dot (`.`) breaks up lines.
 
 
-Let's try the copy-n-pasted designs in ['designs.rb'](https://github.com/cryptocopycats/mooncats/blob/master/lib/mooncats/designs.rb) for easy
+Let's try the copy-n-pasted designs in [`designs.rb`](https://github.com/cryptocopycats/mooncats/blob/master/lib/mooncats/designs.rb) for easy
 (re)use in the mooncats library:
 
 ``` ruby
