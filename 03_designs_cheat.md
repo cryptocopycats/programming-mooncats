@@ -61,8 +61,8 @@ And with 3x zoom factor:
 ![](i/design-007x3.png)
 ![](i/design-008x3.png)
 ![](i/design-009x3.png)
-![](i/design-0010x3.png)
-![](i/design-0011x3.png)
+![](i/design-010x3.png)
+![](i/design-011x3.png)
 ...
 
 
