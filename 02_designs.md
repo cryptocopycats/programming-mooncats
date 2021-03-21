@@ -52,10 +52,10 @@ Or using a "hand-rolled" script
 to compute the message digest in hex(adecimal):
 
 ``` ruby
-require 'digest'
+require 'crypto'       # or use require 'crypto-lite'
 
 text = File.read( 'mooncatparser.js')
-Digest::MD5.hexdigest( text )
+md5( text )
 #=> "dbad5c08ec98bec48490e3c196eec683"
 ```
 
