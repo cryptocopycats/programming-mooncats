@@ -21,7 +21,7 @@ you can find the comment:
 > Use this [MD5 hash] to verify `mooncatparser.js`
 > the cat image data generation javascript file.
 
-followed by the 128-bit MD5 hash value in code:
+followed by the 128-bit / 16-byte MD5 hash value in code:
 
 ``` solidity
 bytes16 public imageGenerationCodeMD5 = 0xdbad5c08ec98bec48490e3c196eec683;
