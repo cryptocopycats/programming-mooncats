@@ -11,10 +11,13 @@ _Inside Unique Pixel Art on the Blockchain..._
 
 by [Gerald Bauer](https://github.com/geraldb), et al
 
-- [Do-It-Yourself (DIY) - Yes, You Can! - Mint Your Own MoonCats Off Chain Using Any Of The 128 True Official Genuine Mooncat™ MD5-Verified Original Designs in ~24x24 Pixel Format or With 2X / 4X / 8X Zoom](01_mint.md)
+- [Do-It-Yourself (DIY) - Yes, You Can! - Mint Your Own MoonCats Off Chain in ~24x24 Pixel Format or With 2X / 4X / 8X Zoom](01_mint.md)
+- [Inside the 128 True Official Genuine Mooncat™ MD5-Verified Original Designs - All About Pose / Facing / Face / Fur](02_designs.md)
 
 
 To be continued...
+
+
 
 
 ## License
