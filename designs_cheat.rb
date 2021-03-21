@@ -3,7 +3,9 @@ $LOAD_PATH.unshift( '../mooncats/lib' )
 require 'mooncats'
 
 
-=begin
+
+# Step 1:  Generate design images using original size and 3x
+
 (0..127).each do |design|
   name = 'design-%03d' % design
 
@@ -13,7 +15,10 @@ require 'mooncats'
   cat = Mooncats::Image.new( design: design, zoom: 3 )
   cat.save( "i/#{name}x3.png" )
 end
-=end
+
+
+
+# Step 2: Generate the all-in-one cheat sheet page
 
 buf =<<TXT
 # MoonCat Designs (128)

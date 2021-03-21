@@ -125,7 +125,7 @@ Resulting in  (rendered "inline" in HTML):
 
 ---
 
-# MoonCat Designs (128)"
+# MoonCat Designs (128)
 
 In original pixel size¹ and 3x zoom;
 tagged with pose (4), face (4), fur (4), facing (2) attributes.
