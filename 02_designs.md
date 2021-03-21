@@ -37,17 +37,30 @@ $ md5sum mooncatparser.js
 resulting in:
 
 ```
-02aa541342463abbb71cc28e71a7c33e *mooncatparser.js
+dbad5c08ec98bec48490e3c196eec683 *mooncatparser.js
 ```
 
-Oops. FAIL.
-If anyone has any success in getting the MD5 hash values
-match up to `dbad5c08ec98bec48490e3c196eec683`, [please tell](https://github.com/cryptocopycats/programming-mooncats/issues).  Any help or (inside) tips and tricks appreciated.
+Bingo! The MD5 hash values match up!
+`dbad5c08ec98bec48490e3c196eec683` equals
+`dbad5c08ec98bec48490e3c196eec683`.  (Note: `0x` is the optional "dummy" hex prefix that you can drop.)
+
+✓ True Official Genuine Mooncat™ original designs verified.
+
+
+
+Or using a "hand-rolled" script
+to compute the message digest in hex(adecimal):
+
+``` ruby
+require 'digest'
+
+text = File.read( 'mooncatparser.js')
+Digest::MD5.hexdigest( text )
+#=> "dbad5c08ec98bec48490e3c196eec683"
+```
 
 
 Onwards.
-
-
 
 Back to line #6 in the open source
 [`mooncatparser.js`](https://github.com/ponderware/mooncatparser/blob/master/mooncatparser.js#L6) image data generation code:
