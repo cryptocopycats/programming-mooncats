@@ -14,6 +14,7 @@ by [Gerald Bauer](https://github.com/geraldb), et al
 - [Do-It-Yourself (DIY) - Yes, You Can! - Mint Your Own MoonCats Off Chain in ~24x24 Pixel Format or With 2X / 4X / 8X Zoom](01_mint.md)
 - [Inside the 128 True Official Genuine Mooncat™ MD5-Verified Original Designs - All About Pose / Facing / Face / Fur](02_designs.md)
 - [Build Your Own All-In-One Page Cheat Sheet with All 128 MoonCat Designs (0-127) In Original Pixel Size And 3X; Tagged With Pose / Face / Fur / Facing Attributes](03_designs_cheat.md)
+- [mooncatrescue.png Composite - Generate Your Own All-25 440-MoonCats in-One Image (2400×6120)](04_composite.md)
 
 
 

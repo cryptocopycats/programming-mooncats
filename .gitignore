@@ -2,4 +2,6 @@
 #   don't check in js sources
 mooncatparser.js
 
+tmp
+tmp/
 
