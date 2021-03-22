@@ -1,4 +1,4 @@
-# mooncatrescue.png Composite - Generate Your Own All-25 440-MoonCats in-One Image (2400×6120)
+# Generate Your Own All-25 440-MoonCats in-One Image - mooncatrescue.png Composite (2400×6120)
 
 
 Inspired by the composite image (2400×2400) that holds all 10 000 cryptopunks:
@@ -15,8 +15,7 @@ Yes, you can.
 ## Step 1 - Read the metadata (5-byte hexstring ids) of all 25 440 MoonCats
 
 
-Let's use the sister [`/mooncatrescue`](https://github.com/cryptocopycats/mooncatrescue) project
-- a free public domain
+Let's use the sister [`/mooncatrescue`](https://github.com/cryptocopycats/mooncatrescue) project - a free public domain
 dataset of all 25 440 MoonCats
 in comma-separated values (CSV) format
 in blocks of a thousand cats each

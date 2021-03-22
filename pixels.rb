@@ -1,3 +1,7 @@
+###
+# to run use:
+#     ruby ./pixels.rb
+
 require 'mooncats'
 
 design = DESIGNS[0]   ## pick any design 0-127

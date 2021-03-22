@@ -1,4 +1,8 @@
-$LOAD_PATH.unshift( '../mooncats/lib' )
+###
+# to run use:
+#     ruby ./designs_cheat.rb
+
+
 
 require 'mooncats'
 
