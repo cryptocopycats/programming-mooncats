@@ -15,8 +15,7 @@ by [Gerald Bauer](https://github.com/geraldb), et al
 - [Inside the 128 True Official Genuine Mooncat™ MD5-Verified Original Designs - All About Pose / Facing / Face / Fur](02_designs.md)
 - [Build Your Own All-In-One Page Cheat Sheet with All 128 MoonCat Designs (0-127) In Original Pixel Size And 3X; Tagged With Pose / Face / Fur / Facing Attributes](03_designs_cheat.md)
 - [Generate Your Own All-25 440-MoonCats in-One Image - mooncatrescue.png Composite (2400×6120)](04_composite.md)
-
-
+- [Inside k - The 2nd Byte in the 5-Byte Mooncat ID - All About Pose / Facing / Face / Fur](05_k.md)
 
 
 To be continued...
