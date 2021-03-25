@@ -51,7 +51,7 @@ And voila!
 
 Bonus:
 Let's generate two sample mooncat images (normal and inverted color palette)
-using design #1 (Sleeping·Smile·Solid·Left). Naming the sample images `colors-000_001.png`,
+using design #1 (Sleeping·Smile·Solid·Left) and naming the sample images `colors-000_001.png`,
 `colors-001_001.png`, `colors-002_001.png`, and so on
 and the images with the inverted color palette `colors-000i_001.png`,
 `colors-001i_001.png`, `colors-002i_001.png`, and so on:
@@ -62,10 +62,10 @@ Add add inside the `(0..359)` loop:
 
 ``` ruby
 cat = Mooncats::Image.new( design: 1, colors: normal )
-cat.save( "ii/#{name}_001.png")
+cat.save( "i/#{name}_001.png")
 
 cat = Mooncats::Image.new( design: 1, colors: inverted )
-cat.save( "ii/#{name}i_001.png")
+cat.save( "i/#{name}i_001.png")
 ```
 
 
