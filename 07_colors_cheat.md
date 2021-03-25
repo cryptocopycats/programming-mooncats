@@ -1,0 +1,561 @@
+# Build Your Own All-In-One Page Cheat Sheet with All Colors From Hue 0° to 359° Incl. the  Normal Derived Five Color Palette or the Inverted
+
+
+
+Let's build an all-in-one page cheat sheet
+that lists all colors from hue 0° to 359° - all 360° degrees on the color wheel - and let's include a bar for the normal derived five color palette or the inverted.
+
+
+## Step 1:  Generate a sample image and a color bar
+
+Let's loop from 0° to 359°  and generate
+two color bar images for every degree
+that hold all five colors of the normal or inverted palette.
+Naming the color bar images
+`colors-000.png`,
+`colors-001.png`, `colors-002.png`, and so on
+and the images with the inverted palette `colors-000i.png`,
+`colors-001i.png`, `colors-002i.png`, and so on.
+
+
+``` ruby
+(0..359).each do |hue|
+  normal   = Mooncats::Image.derive_palette( hue: hue )
+  inverted = Mooncats::Image.derive_palette( hue: hue, invert: true )
+
+  name = 'colors-%03d' % hue
+
+  bar = Mooncats::Image::Bar.new( colors: normal )
+  bar.save( "i/#{name}.png")
+
+  bar = Mooncats::Image::Bar.new( colors: inverted )
+  bar.save( "i/#{name}i.png")
+end
+```
+
+And voila!
+
+![](i/colors-000.png)  ![](i/colors-000i.png)  <br>
+![](i/colors-014.png)  ![](i/colors-014i.png)  <br>
+![](i/colors-029.png)  ![](i/colors-029i.png)  <br>
+![](i/colors-044.png)  ![](i/colors-044i.png)  <br>
+![](i/colors-059.png)  ![](i/colors-059i.png)  <br>
+![](i/colors-074.png)  ![](i/colors-074i.png)  <br>
+![](i/colors-089.png)  ![](i/colors-089i.png)  <br>
+![](i/colors-104.png)  ![](i/colors-104i.png)  <br>
+![](i/colors-119.png)  ![](i/colors-119i.png)  <br>
+![](i/colors-134.png)  ![](i/colors-134i.png)  <br>
+![](i/colors-149.png)  ![](i/colors-149i.png)  <br>
+...
+
+
+Bonus:
+Let's generate two sample mooncat images (normal and inverted color palette)
+using design #1 (Sleeping·Smile·Solid·Left). Naming the sample images `colors-000_001.png`,
+`colors-001_001.png`, `colors-002_001.png`, and so on
+and the images with the inverted color palette `colors-000i_001.png`,
+`colors-001i_001.png`, `colors-002i_001.png`, and so on:
+
+
+Add add inside the `(0..359)` loop:
+
+
+``` ruby
+cat = Mooncats::Image.new( design: 1, colors: normal )
+cat.save( "ii/#{name}_001.png")
+
+cat = Mooncats::Image.new( design: 1, colors: inverted )
+cat.save( "ii/#{name}i_001.png")
+```
+
+
+And voila!
+
+![](i/colors-000_001.png)  ![](i/colors-000i_001.png)  <br>
+![](i/colors-014_001.png)  ![](i/colors-014i_001.png)  <br>
+![](i/colors-029_001.png)  ![](i/colors-029i_001.png)  <br>
+![](i/colors-044_001.png)  ![](i/colors-044i_001.png)  <br>
+![](i/colors-059_001.png)  ![](i/colors-059i_001.png)  <br>
+![](i/colors-074_001.png)  ![](i/colors-074i_001.png)  <br>
+![](i/colors-089_001.png)  ![](i/colors-089i_001.png)  <br>
+![](i/colors-104_001.png)  ![](i/colors-104i_001.png)  <br>
+![](i/colors-119_001.png)  ![](i/colors-119i_001.png)  <br>
+![](i/colors-134_001.png)  ![](i/colors-134i_001.png)  <br>
+![](i/colors-149_001.png)  ![](i/colors-149i_001.png)  <br>
+...
+
+
+
+
+## Step 2: Generate the all-in-one cheat sheet page
+
+
+Let's start the page with a header and little intro:
+
+``` ruby
+buf =<<TXT
+# MoonCat Colors (360)
+
+Note: Every mooncat has 5 colors.
+All (remaining) 4 colors are derived from the
+primary / first color (specified in degrees from 0 to 359).
+If the inverted palette flag is set,
+than color 2 becomes color 4,
+color 3 becomes color 5, color 4 becomes color 2, and
+color 5 becomes color 3.
+
+The formula for deriving the color palette is
+(where hue is a number from 0 to 359 -
+mapping to degrees on the color wheel):
+
+    hx = hue
+    hy = (hue + 320) % 360
+
+    hsl( hx, 1, 0.1 )    # color 1
+    hsl( hx, 1, 0.2 )    # color 2
+    hsl( hx, 1, 0.45 )   # color 3
+    hsl( hx, 1, 0.7 )    # color 4
+    hsl( hy, 1, 0.8 )    # color 5
+
+TXT
+```
+
+
+And let's group the normal and inverted
+color palette side-by-side and
+let's include all five colors (1 2 3 4 5)
+printed out in the hex string rgb (red/green/blue)
+format e.g. `#320000 #660000 #e50000 #ff6565 #ff99dd`.
+
+Note: The script writes out structured text and "ASCII" table
+using the markdown (.md) formatting conventions:
+
+
+``` ruby
+buf << "|      | Hue  | Colors | 1 2 3 4 5  | Colors <br> (Inverted) |\n"
+buf << "|------|-----:|--------|------------|------------|\n"
+
+(0..359).each do |hue|
+   name = 'colors-%03d' % hue
+
+   normal   = Mooncats::Image.derive_palette( hue: hue )
+
+   buf << "| ![](i/#{name}_001.png) "
+   buf << "  ![](i/#{name}i_001.png) "
+   buf << "| #{hue}° "
+   buf << "| ![](i/#{name}.png) "
+   buf << "| `#{Mooncats::Color.to_hex(normal[0])}` "
+   buf << " `#{Mooncats::Color.to_hex(normal[1])}` "
+   buf << " `#{Mooncats::Color.to_hex(normal[2])}` "
+   buf << " `#{Mooncats::Color.to_hex(normal[3])}` "
+   buf << " `#{Mooncats::Color.to_hex(normal[4])}` "
+   buf << "| ![](i/#{name}i.png) "
+   buf << "|\n"
+end
+
+puts buf
+```
+
+Resulting in  (rendered "inline" in HTML):
+
+---
+
+# MoonCat Colors (360)
+
+Note: Every mooncat has 5 colors.
+All (remaining) 4 colors are derived from the
+primary / first color (specified in degrees from 0 to 359).
+If the inverted palette flag is set,
+than color 2 becomes color 4,
+color 3 becomes color 5, color 4 becomes color 2, and
+color 5 becomes color 3.
+
+The formula for deriving the color palette is
+(where hue is a number from 0 to 359 -
+mapping to degrees on the color wheel):
+
+
+``` ruby
+hx = hue
+hy = (hue + 320) % 360
+
+hsl( hx, 1, 0.1 )    # color 1
+hsl( hx, 1, 0.2 )    # color 2
+hsl( hx, 1, 0.45 )   # color 3
+hsl( hx, 1, 0.7 )    # color 4
+hsl( hy, 1, 0.8 )    # color 5
+```
+
+
+|      | Hue  | Colors | 1 2 3 4 5  | Colors <br> (Inverted) |
+|------|-----:|--------|------------|------------|
+| ![](i/colors-000_001.png)   ![](i/colors-000i_001.png) | 0° | ![](i/colors-000.png) | `#320000`  `#660000`  `#e50000`  `#ff6565`  `#ff99dd` | ![](i/colors-000i.png) |
+| ![](i/colors-001_001.png)   ![](i/colors-001i_001.png) | 1° | ![](i/colors-001.png) | `#320000`  `#660100`  `#e50300`  `#ff6865`  `#ff99db` | ![](i/colors-001i.png) |
+| ![](i/colors-002_001.png)   ![](i/colors-002i_001.png) | 2° | ![](i/colors-002.png) | `#320100`  `#660300`  `#e50700`  `#ff6b65`  `#ff99d9` | ![](i/colors-002i.png) |
+| ![](i/colors-003_001.png)   ![](i/colors-003i_001.png) | 3° | ![](i/colors-003.png) | `#320200`  `#660500`  `#e50b00`  `#ff6d65`  `#ff99d7` | ![](i/colors-003i.png) |
+| ![](i/colors-004_001.png)   ![](i/colors-004i_001.png) | 4° | ![](i/colors-004.png) | `#320300`  `#660600`  `#e50f00`  `#ff7065`  `#ff99d6` | ![](i/colors-004i.png) |
+| ![](i/colors-005_001.png)   ![](i/colors-005i_001.png) | 5° | ![](i/colors-005.png) | `#320400`  `#660800`  `#e51300`  `#ff7265`  `#ff99d4` | ![](i/colors-005i.png) |
+| ![](i/colors-006_001.png)   ![](i/colors-006i_001.png) | 6° | ![](i/colors-006.png) | `#320500`  `#660a00`  `#e51600`  `#ff7565`  `#ff99d2` | ![](i/colors-006i.png) |
+| ![](i/colors-007_001.png)   ![](i/colors-007i_001.png) | 7° | ![](i/colors-007.png) | `#320500`  `#660b00`  `#e51a00`  `#ff7765`  `#ff99d1` | ![](i/colors-007i.png) |
+| ![](i/colors-008_001.png)   ![](i/colors-008i_001.png) | 8° | ![](i/colors-008.png) | `#320600`  `#660d00`  `#e51e00`  `#ff7a65`  `#ff99cf` | ![](i/colors-008i.png) |
+| ![](i/colors-009_001.png)   ![](i/colors-009i_001.png) | 9° | ![](i/colors-009.png) | `#320700`  `#660f00`  `#e52200`  `#ff7c65`  `#ff99cd` | ![](i/colors-009i.png) |
+| ![](i/colors-010_001.png)   ![](i/colors-010i_001.png) | 10° | ![](i/colors-010.png) | `#320800`  `#661000`  `#e52600`  `#ff7f65`  `#ff99cc` | ![](i/colors-010i.png) |
+| ![](i/colors-011_001.png)   ![](i/colors-011i_001.png) | 11° | ![](i/colors-011.png) | `#320900`  `#661200`  `#e52a00`  `#ff8265`  `#ff99ca` | ![](i/colors-011i.png) |
+| ![](i/colors-012_001.png)   ![](i/colors-012i_001.png) | 12° | ![](i/colors-012.png) | `#320a00`  `#661400`  `#e52d00`  `#ff8465`  `#ff99c8` | ![](i/colors-012i.png) |
+| ![](i/colors-013_001.png)   ![](i/colors-013i_001.png) | 13° | ![](i/colors-013.png) | `#320b00`  `#661600`  `#e53100`  `#ff8765`  `#ff99c6` | ![](i/colors-013i.png) |
+| ![](i/colors-014_001.png)   ![](i/colors-014i_001.png) | 14° | ![](i/colors-014.png) | `#320b00`  `#661700`  `#e53500`  `#ff8965`  `#ff99c5` | ![](i/colors-014i.png) |
+| ![](i/colors-015_001.png)   ![](i/colors-015i_001.png) | 15° | ![](i/colors-015.png) | `#320c00`  `#661900`  `#e53900`  `#ff8c65`  `#ff99c3` | ![](i/colors-015i.png) |
+| ![](i/colors-016_001.png)   ![](i/colors-016i_001.png) | 16° | ![](i/colors-016.png) | `#320d00`  `#661b00`  `#e53d00`  `#ff8e65`  `#ff99c1` | ![](i/colors-016i.png) |
+| ![](i/colors-017_001.png)   ![](i/colors-017i_001.png) | 17° | ![](i/colors-017.png) | `#320e00`  `#661c00`  `#e54100`  `#ff9165`  `#ff99c0` | ![](i/colors-017i.png) |
+| ![](i/colors-018_001.png)   ![](i/colors-018i_001.png) | 18° | ![](i/colors-018.png) | `#320f00`  `#661e00`  `#e54400`  `#ff9365`  `#ff99be` | ![](i/colors-018i.png) |
+| ![](i/colors-019_001.png)   ![](i/colors-019i_001.png) | 19° | ![](i/colors-019.png) | `#321000`  `#662000`  `#e54800`  `#ff9665`  `#ff99bc` | ![](i/colors-019i.png) |
+| ![](i/colors-020_001.png)   ![](i/colors-020i_001.png) | 20° | ![](i/colors-020.png) | `#321000`  `#662100`  `#e54c00`  `#ff9865`  `#ff99bb` | ![](i/colors-020i.png) |
+| ![](i/colors-021_001.png)   ![](i/colors-021i_001.png) | 21° | ![](i/colors-021.png) | `#321100`  `#662300`  `#e55000`  `#ff9b65`  `#ff99b9` | ![](i/colors-021i.png) |
+| ![](i/colors-022_001.png)   ![](i/colors-022i_001.png) | 22° | ![](i/colors-022.png) | `#321200`  `#662500`  `#e55400`  `#ff9e65`  `#ff99b7` | ![](i/colors-022i.png) |
+| ![](i/colors-023_001.png)   ![](i/colors-023i_001.png) | 23° | ![](i/colors-023.png) | `#321300`  `#662700`  `#e55700`  `#ffa065`  `#ff99b5` | ![](i/colors-023i.png) |
+| ![](i/colors-024_001.png)   ![](i/colors-024i_001.png) | 24° | ![](i/colors-024.png) | `#321400`  `#662800`  `#e55b00`  `#ffa365`  `#ff99b4` | ![](i/colors-024i.png) |
+| ![](i/colors-025_001.png)   ![](i/colors-025i_001.png) | 25° | ![](i/colors-025.png) | `#321500`  `#662a00`  `#e55f00`  `#ffa565`  `#ff99b2` | ![](i/colors-025i.png) |
+| ![](i/colors-026_001.png)   ![](i/colors-026i_001.png) | 26° | ![](i/colors-026.png) | `#321600`  `#662c00`  `#e56300`  `#ffa865`  `#ff99b0` | ![](i/colors-026i.png) |
+| ![](i/colors-027_001.png)   ![](i/colors-027i_001.png) | 27° | ![](i/colors-027.png) | `#321600`  `#662d00`  `#e56700`  `#ffaa65`  `#ff99af` | ![](i/colors-027i.png) |
+| ![](i/colors-028_001.png)   ![](i/colors-028i_001.png) | 28° | ![](i/colors-028.png) | `#321700`  `#662f00`  `#e56b00`  `#ffad65`  `#ff99ad` | ![](i/colors-028i.png) |
+| ![](i/colors-029_001.png)   ![](i/colors-029i_001.png) | 29° | ![](i/colors-029.png) | `#321800`  `#663100`  `#e56e00`  `#ffaf65`  `#ff99ab` | ![](i/colors-029i.png) |
+| ![](i/colors-030_001.png)   ![](i/colors-030i_001.png) | 30° | ![](i/colors-030.png) | `#321900`  `#663300`  `#e57200`  `#ffb265`  `#ff99aa` | ![](i/colors-030i.png) |
+| ![](i/colors-031_001.png)   ![](i/colors-031i_001.png) | 31° | ![](i/colors-031.png) | `#321a00`  `#663400`  `#e57600`  `#ffb565`  `#ff99a8` | ![](i/colors-031i.png) |
+| ![](i/colors-032_001.png)   ![](i/colors-032i_001.png) | 32° | ![](i/colors-032.png) | `#321b00`  `#663600`  `#e57a00`  `#ffb765`  `#ff99a6` | ![](i/colors-032i.png) |
+| ![](i/colors-033_001.png)   ![](i/colors-033i_001.png) | 33° | ![](i/colors-033.png) | `#321c00`  `#663800`  `#e57e00`  `#ffba65`  `#ff99a4` | ![](i/colors-033i.png) |
+| ![](i/colors-034_001.png)   ![](i/colors-034i_001.png) | 34° | ![](i/colors-034.png) | `#321c00`  `#663900`  `#e58200`  `#ffbc65`  `#ff99a3` | ![](i/colors-034i.png) |
+| ![](i/colors-035_001.png)   ![](i/colors-035i_001.png) | 35° | ![](i/colors-035.png) | `#321d00`  `#663b00`  `#e58500`  `#ffbf65`  `#ff99a1` | ![](i/colors-035i.png) |
+| ![](i/colors-036_001.png)   ![](i/colors-036i_001.png) | 36° | ![](i/colors-036.png) | `#321e00`  `#663d00`  `#e58900`  `#ffc165`  `#ff999f` | ![](i/colors-036i.png) |
+| ![](i/colors-037_001.png)   ![](i/colors-037i_001.png) | 37° | ![](i/colors-037.png) | `#321f00`  `#663e00`  `#e58d00`  `#ffc465`  `#ff999e` | ![](i/colors-037i.png) |
+| ![](i/colors-038_001.png)   ![](i/colors-038i_001.png) | 38° | ![](i/colors-038.png) | `#322000`  `#664000`  `#e59100`  `#ffc665`  `#ff999c` | ![](i/colors-038i.png) |
+| ![](i/colors-039_001.png)   ![](i/colors-039i_001.png) | 39° | ![](i/colors-039.png) | `#322100`  `#664200`  `#e59500`  `#ffc965`  `#ff999a` | ![](i/colors-039i.png) |
+| ![](i/colors-040_001.png)   ![](i/colors-040i_001.png) | 40° | ![](i/colors-040.png) | `#322200`  `#664400`  `#e59900`  `#ffcc65`  `#ff9999` | ![](i/colors-040i.png) |
+| ![](i/colors-041_001.png)   ![](i/colors-041i_001.png) | 41° | ![](i/colors-041.png) | `#322200`  `#664500`  `#e59c00`  `#ffce65`  `#ff9a99` | ![](i/colors-041i.png) |
+| ![](i/colors-042_001.png)   ![](i/colors-042i_001.png) | 42° | ![](i/colors-042.png) | `#322300`  `#664700`  `#e5a000`  `#ffd165`  `#ff9c99` | ![](i/colors-042i.png) |
+| ![](i/colors-043_001.png)   ![](i/colors-043i_001.png) | 43° | ![](i/colors-043.png) | `#322400`  `#664900`  `#e5a400`  `#ffd365`  `#ff9e99` | ![](i/colors-043i.png) |
+| ![](i/colors-044_001.png)   ![](i/colors-044i_001.png) | 44° | ![](i/colors-044.png) | `#322500`  `#664a00`  `#e5a800`  `#ffd665`  `#ff9f99` | ![](i/colors-044i.png) |
+| ![](i/colors-045_001.png)   ![](i/colors-045i_001.png) | 45° | ![](i/colors-045.png) | `#322600`  `#664c00`  `#e5ac00`  `#ffd865`  `#ffa199` | ![](i/colors-045i.png) |
+| ![](i/colors-046_001.png)   ![](i/colors-046i_001.png) | 46° | ![](i/colors-046.png) | `#322700`  `#664e00`  `#e5af00`  `#ffdb65`  `#ffa399` | ![](i/colors-046i.png) |
+| ![](i/colors-047_001.png)   ![](i/colors-047i_001.png) | 47° | ![](i/colors-047.png) | `#322700`  `#664f00`  `#e5b300`  `#ffdd65`  `#ffa499` | ![](i/colors-047i.png) |
+| ![](i/colors-048_001.png)   ![](i/colors-048i_001.png) | 48° | ![](i/colors-048.png) | `#322800`  `#665100`  `#e5b700`  `#ffe065`  `#ffa699` | ![](i/colors-048i.png) |
+| ![](i/colors-049_001.png)   ![](i/colors-049i_001.png) | 49° | ![](i/colors-049.png) | `#322900`  `#665300`  `#e5bb00`  `#ffe265`  `#ffa899` | ![](i/colors-049i.png) |
+| ![](i/colors-050_001.png)   ![](i/colors-050i_001.png) | 50° | ![](i/colors-050.png) | `#322a00`  `#665500`  `#e5bf00`  `#ffe565`  `#ffaa99` | ![](i/colors-050i.png) |
+| ![](i/colors-051_001.png)   ![](i/colors-051i_001.png) | 51° | ![](i/colors-051.png) | `#322b00`  `#665600`  `#e5c300`  `#ffe865`  `#ffab99` | ![](i/colors-051i.png) |
+| ![](i/colors-052_001.png)   ![](i/colors-052i_001.png) | 52° | ![](i/colors-052.png) | `#322c00`  `#665800`  `#e5c600`  `#ffea65`  `#ffad99` | ![](i/colors-052i.png) |
+| ![](i/colors-053_001.png)   ![](i/colors-053i_001.png) | 53° | ![](i/colors-053.png) | `#322d00`  `#665a00`  `#e5ca00`  `#ffed65`  `#ffaf99` | ![](i/colors-053i.png) |
+| ![](i/colors-054_001.png)   ![](i/colors-054i_001.png) | 54° | ![](i/colors-054.png) | `#322d00`  `#665b00`  `#e5ce00`  `#ffef65`  `#ffb099` | ![](i/colors-054i.png) |
+| ![](i/colors-055_001.png)   ![](i/colors-055i_001.png) | 55° | ![](i/colors-055.png) | `#322e00`  `#665d00`  `#e5d200`  `#fff265`  `#ffb299` | ![](i/colors-055i.png) |
+| ![](i/colors-056_001.png)   ![](i/colors-056i_001.png) | 56° | ![](i/colors-056.png) | `#322f00`  `#665f00`  `#e5d600`  `#fff465`  `#ffb499` | ![](i/colors-056i.png) |
+| ![](i/colors-057_001.png)   ![](i/colors-057i_001.png) | 57° | ![](i/colors-057.png) | `#323000`  `#666000`  `#e5da00`  `#fff765`  `#ffb599` | ![](i/colors-057i.png) |
+| ![](i/colors-058_001.png)   ![](i/colors-058i_001.png) | 58° | ![](i/colors-058.png) | `#323100`  `#666200`  `#e5dd00`  `#fff965`  `#ffb799` | ![](i/colors-058i.png) |
+| ![](i/colors-059_001.png)   ![](i/colors-059i_001.png) | 59° | ![](i/colors-059.png) | `#323200`  `#666400`  `#e5e100`  `#fffc65`  `#ffb999` | ![](i/colors-059i.png) |
+| ![](i/colors-060_001.png)   ![](i/colors-060i_001.png) | 60° | ![](i/colors-060.png) | `#323200`  `#666600`  `#e5e500`  `#ffff65`  `#ffbb99` | ![](i/colors-060i.png) |
+| ![](i/colors-061_001.png)   ![](i/colors-061i_001.png) | 61° | ![](i/colors-061.png) | `#323200`  `#646600`  `#e1e500`  `#fcff65`  `#ffbc99` | ![](i/colors-061i.png) |
+| ![](i/colors-062_001.png)   ![](i/colors-062i_001.png) | 62° | ![](i/colors-062.png) | `#313200`  `#626600`  `#dde500`  `#f9ff65`  `#ffbe99` | ![](i/colors-062i.png) |
+| ![](i/colors-063_001.png)   ![](i/colors-063i_001.png) | 63° | ![](i/colors-063.png) | `#303200`  `#606600`  `#dae500`  `#f7ff65`  `#ffc099` | ![](i/colors-063i.png) |
+| ![](i/colors-064_001.png)   ![](i/colors-064i_001.png) | 64° | ![](i/colors-064.png) | `#2f3200`  `#5f6600`  `#d6e500`  `#f4ff65`  `#ffc199` | ![](i/colors-064i.png) |
+| ![](i/colors-065_001.png)   ![](i/colors-065i_001.png) | 65° | ![](i/colors-065.png) | `#2e3200`  `#5d6600`  `#d2e500`  `#f2ff65`  `#ffc399` | ![](i/colors-065i.png) |
+| ![](i/colors-066_001.png)   ![](i/colors-066i_001.png) | 66° | ![](i/colors-066.png) | `#2d3200`  `#5b6600`  `#cee500`  `#efff65`  `#ffc599` | ![](i/colors-066i.png) |
+| ![](i/colors-067_001.png)   ![](i/colors-067i_001.png) | 67° | ![](i/colors-067.png) | `#2d3200`  `#5a6600`  `#cae500`  `#edff65`  `#ffc699` | ![](i/colors-067i.png) |
+| ![](i/colors-068_001.png)   ![](i/colors-068i_001.png) | 68° | ![](i/colors-068.png) | `#2c3200`  `#586600`  `#c6e500`  `#eaff65`  `#ffc899` | ![](i/colors-068i.png) |
+| ![](i/colors-069_001.png)   ![](i/colors-069i_001.png) | 69° | ![](i/colors-069.png) | `#2b3200`  `#566600`  `#c3e500`  `#e8ff65`  `#ffca99` | ![](i/colors-069i.png) |
+| ![](i/colors-070_001.png)   ![](i/colors-070i_001.png) | 70° | ![](i/colors-070.png) | `#2a3200`  `#556600`  `#bfe500`  `#e5ff65`  `#ffcc99` | ![](i/colors-070i.png) |
+| ![](i/colors-071_001.png)   ![](i/colors-071i_001.png) | 71° | ![](i/colors-071.png) | `#293200`  `#536600`  `#bbe500`  `#e2ff65`  `#ffcd99` | ![](i/colors-071i.png) |
+| ![](i/colors-072_001.png)   ![](i/colors-072i_001.png) | 72° | ![](i/colors-072.png) | `#283200`  `#516600`  `#b7e500`  `#e0ff65`  `#ffcf99` | ![](i/colors-072i.png) |
+| ![](i/colors-073_001.png)   ![](i/colors-073i_001.png) | 73° | ![](i/colors-073.png) | `#273200`  `#4f6600`  `#b3e500`  `#ddff65`  `#ffd199` | ![](i/colors-073i.png) |
+| ![](i/colors-074_001.png)   ![](i/colors-074i_001.png) | 74° | ![](i/colors-074.png) | `#273200`  `#4e6600`  `#afe500`  `#dbff65`  `#ffd299` | ![](i/colors-074i.png) |
+| ![](i/colors-075_001.png)   ![](i/colors-075i_001.png) | 75° | ![](i/colors-075.png) | `#263200`  `#4c6600`  `#ace500`  `#d8ff65`  `#ffd499` | ![](i/colors-075i.png) |
+| ![](i/colors-076_001.png)   ![](i/colors-076i_001.png) | 76° | ![](i/colors-076.png) | `#253200`  `#4a6600`  `#a8e500`  `#d6ff65`  `#ffd699` | ![](i/colors-076i.png) |
+| ![](i/colors-077_001.png)   ![](i/colors-077i_001.png) | 77° | ![](i/colors-077.png) | `#243200`  `#496600`  `#a4e500`  `#d3ff65`  `#ffd799` | ![](i/colors-077i.png) |
+| ![](i/colors-078_001.png)   ![](i/colors-078i_001.png) | 78° | ![](i/colors-078.png) | `#233200`  `#476600`  `#a0e500`  `#d1ff65`  `#ffd999` | ![](i/colors-078i.png) |
+| ![](i/colors-079_001.png)   ![](i/colors-079i_001.png) | 79° | ![](i/colors-079.png) | `#223200`  `#456600`  `#9ce500`  `#ceff65`  `#ffdb99` | ![](i/colors-079i.png) |
+| ![](i/colors-080_001.png)   ![](i/colors-080i_001.png) | 80° | ![](i/colors-080.png) | `#223200`  `#446600`  `#99e500`  `#ccff65`  `#ffdd99` | ![](i/colors-080i.png) |
+| ![](i/colors-081_001.png)   ![](i/colors-081i_001.png) | 81° | ![](i/colors-081.png) | `#213200`  `#426600`  `#95e500`  `#c9ff65`  `#ffde99` | ![](i/colors-081i.png) |
+| ![](i/colors-082_001.png)   ![](i/colors-082i_001.png) | 82° | ![](i/colors-082.png) | `#203200`  `#406600`  `#91e500`  `#c6ff65`  `#ffe099` | ![](i/colors-082i.png) |
+| ![](i/colors-083_001.png)   ![](i/colors-083i_001.png) | 83° | ![](i/colors-083.png) | `#1f3200`  `#3e6600`  `#8de500`  `#c4ff65`  `#ffe299` | ![](i/colors-083i.png) |
+| ![](i/colors-084_001.png)   ![](i/colors-084i_001.png) | 84° | ![](i/colors-084.png) | `#1e3200`  `#3d6600`  `#89e500`  `#c1ff65`  `#ffe399` | ![](i/colors-084i.png) |
+| ![](i/colors-085_001.png)   ![](i/colors-085i_001.png) | 85° | ![](i/colors-085.png) | `#1d3200`  `#3b6600`  `#85e500`  `#bfff65`  `#ffe599` | ![](i/colors-085i.png) |
+| ![](i/colors-086_001.png)   ![](i/colors-086i_001.png) | 86° | ![](i/colors-086.png) | `#1c3200`  `#396600`  `#82e500`  `#bcff65`  `#ffe799` | ![](i/colors-086i.png) |
+| ![](i/colors-087_001.png)   ![](i/colors-087i_001.png) | 87° | ![](i/colors-087.png) | `#1c3200`  `#386600`  `#7ee500`  `#baff65`  `#ffe899` | ![](i/colors-087i.png) |
+| ![](i/colors-088_001.png)   ![](i/colors-088i_001.png) | 88° | ![](i/colors-088.png) | `#1b3200`  `#366600`  `#7ae500`  `#b7ff65`  `#ffea99` | ![](i/colors-088i.png) |
+| ![](i/colors-089_001.png)   ![](i/colors-089i_001.png) | 89° | ![](i/colors-089.png) | `#1a3200`  `#346600`  `#76e500`  `#b5ff65`  `#ffec99` | ![](i/colors-089i.png) |
+| ![](i/colors-090_001.png)   ![](i/colors-090i_001.png) | 90° | ![](i/colors-090.png) | `#193200`  `#336600`  `#72e500`  `#b2ff65`  `#ffee99` | ![](i/colors-090i.png) |
+| ![](i/colors-091_001.png)   ![](i/colors-091i_001.png) | 91° | ![](i/colors-091.png) | `#183200`  `#316600`  `#6ee500`  `#afff65`  `#ffef99` | ![](i/colors-091i.png) |
+| ![](i/colors-092_001.png)   ![](i/colors-092i_001.png) | 92° | ![](i/colors-092.png) | `#173200`  `#2f6600`  `#6be500`  `#adff65`  `#fff199` | ![](i/colors-092i.png) |
+| ![](i/colors-093_001.png)   ![](i/colors-093i_001.png) | 93° | ![](i/colors-093.png) | `#163200`  `#2d6600`  `#67e500`  `#aaff65`  `#fff399` | ![](i/colors-093i.png) |
+| ![](i/colors-094_001.png)   ![](i/colors-094i_001.png) | 94° | ![](i/colors-094.png) | `#163200`  `#2c6600`  `#63e500`  `#a8ff65`  `#fff499` | ![](i/colors-094i.png) |
+| ![](i/colors-095_001.png)   ![](i/colors-095i_001.png) | 95° | ![](i/colors-095.png) | `#153200`  `#2a6600`  `#5fe500`  `#a5ff65`  `#fff699` | ![](i/colors-095i.png) |
+| ![](i/colors-096_001.png)   ![](i/colors-096i_001.png) | 96° | ![](i/colors-096.png) | `#143200`  `#286600`  `#5be500`  `#a3ff65`  `#fff899` | ![](i/colors-096i.png) |
+| ![](i/colors-097_001.png)   ![](i/colors-097i_001.png) | 97° | ![](i/colors-097.png) | `#133200`  `#276600`  `#57e500`  `#a0ff65`  `#fff999` | ![](i/colors-097i.png) |
+| ![](i/colors-098_001.png)   ![](i/colors-098i_001.png) | 98° | ![](i/colors-098.png) | `#123200`  `#256600`  `#54e500`  `#9eff65`  `#fffb99` | ![](i/colors-098i.png) |
+| ![](i/colors-099_001.png)   ![](i/colors-099i_001.png) | 99° | ![](i/colors-099.png) | `#113200`  `#236600`  `#50e500`  `#9bff65`  `#fffd99` | ![](i/colors-099i.png) |
+| ![](i/colors-100_001.png)   ![](i/colors-100i_001.png) | 100° | ![](i/colors-100.png) | `#103200`  `#216600`  `#4ce500`  `#98ff65`  `#ffff99` | ![](i/colors-100i.png) |
+| ![](i/colors-101_001.png)   ![](i/colors-101i_001.png) | 101° | ![](i/colors-101.png) | `#103200`  `#206600`  `#48e500`  `#96ff65`  `#fdff99` | ![](i/colors-101i.png) |
+| ![](i/colors-102_001.png)   ![](i/colors-102i_001.png) | 102° | ![](i/colors-102.png) | `#0f3200`  `#1e6600`  `#44e500`  `#93ff65`  `#fbff99` | ![](i/colors-102i.png) |
+| ![](i/colors-103_001.png)   ![](i/colors-103i_001.png) | 103° | ![](i/colors-103.png) | `#0e3200`  `#1c6600`  `#41e500`  `#91ff65`  `#f9ff99` | ![](i/colors-103i.png) |
+| ![](i/colors-104_001.png)   ![](i/colors-104i_001.png) | 104° | ![](i/colors-104.png) | `#0d3200`  `#1b6600`  `#3de500`  `#8eff65`  `#f8ff99` | ![](i/colors-104i.png) |
+| ![](i/colors-105_001.png)   ![](i/colors-105i_001.png) | 105° | ![](i/colors-105.png) | `#0c3200`  `#196600`  `#39e500`  `#8cff65`  `#f6ff99` | ![](i/colors-105i.png) |
+| ![](i/colors-106_001.png)   ![](i/colors-106i_001.png) | 106° | ![](i/colors-106.png) | `#0b3200`  `#176600`  `#35e500`  `#89ff65`  `#f4ff99` | ![](i/colors-106i.png) |
+| ![](i/colors-107_001.png)   ![](i/colors-107i_001.png) | 107° | ![](i/colors-107.png) | `#0b3200`  `#166600`  `#31e500`  `#87ff65`  `#f3ff99` | ![](i/colors-107i.png) |
+| ![](i/colors-108_001.png)   ![](i/colors-108i_001.png) | 108° | ![](i/colors-108.png) | `#0a3200`  `#146600`  `#2de500`  `#84ff65`  `#f1ff99` | ![](i/colors-108i.png) |
+| ![](i/colors-109_001.png)   ![](i/colors-109i_001.png) | 109° | ![](i/colors-109.png) | `#093200`  `#126600`  `#2ae500`  `#82ff65`  `#efff99` | ![](i/colors-109i.png) |
+| ![](i/colors-110_001.png)   ![](i/colors-110i_001.png) | 110° | ![](i/colors-110.png) | `#083200`  `#116600`  `#26e500`  `#7fff65`  `#eeff99` | ![](i/colors-110i.png) |
+| ![](i/colors-111_001.png)   ![](i/colors-111i_001.png) | 111° | ![](i/colors-111.png) | `#073200`  `#0f6600`  `#22e500`  `#7cff65`  `#ecff99` | ![](i/colors-111i.png) |
+| ![](i/colors-112_001.png)   ![](i/colors-112i_001.png) | 112° | ![](i/colors-112.png) | `#063200`  `#0d6600`  `#1ee500`  `#7aff65`  `#eaff99` | ![](i/colors-112i.png) |
+| ![](i/colors-113_001.png)   ![](i/colors-113i_001.png) | 113° | ![](i/colors-113.png) | `#053200`  `#0b6600`  `#1ae500`  `#77ff65`  `#e8ff99` | ![](i/colors-113i.png) |
+| ![](i/colors-114_001.png)   ![](i/colors-114i_001.png) | 114° | ![](i/colors-114.png) | `#053200`  `#0a6600`  `#16e500`  `#75ff65`  `#e7ff99` | ![](i/colors-114i.png) |
+| ![](i/colors-115_001.png)   ![](i/colors-115i_001.png) | 115° | ![](i/colors-115.png) | `#043200`  `#086600`  `#13e500`  `#72ff65`  `#e5ff99` | ![](i/colors-115i.png) |
+| ![](i/colors-116_001.png)   ![](i/colors-116i_001.png) | 116° | ![](i/colors-116.png) | `#033200`  `#066600`  `#0fe500`  `#70ff65`  `#e3ff99` | ![](i/colors-116i.png) |
+| ![](i/colors-117_001.png)   ![](i/colors-117i_001.png) | 117° | ![](i/colors-117.png) | `#023200`  `#056600`  `#0be500`  `#6dff65`  `#e2ff99` | ![](i/colors-117i.png) |
+| ![](i/colors-118_001.png)   ![](i/colors-118i_001.png) | 118° | ![](i/colors-118.png) | `#013200`  `#036600`  `#07e500`  `#6bff65`  `#e0ff99` | ![](i/colors-118i.png) |
+| ![](i/colors-119_001.png)   ![](i/colors-119i_001.png) | 119° | ![](i/colors-119.png) | `#003200`  `#016600`  `#03e500`  `#68ff65`  `#deff99` | ![](i/colors-119i.png) |
+| ![](i/colors-120_001.png)   ![](i/colors-120i_001.png) | 120° | ![](i/colors-120.png) | `#003200`  `#006600`  `#00e500`  `#65ff65`  `#ddff99` | ![](i/colors-120i.png) |
+| ![](i/colors-121_001.png)   ![](i/colors-121i_001.png) | 121° | ![](i/colors-121.png) | `#003200`  `#006601`  `#00e503`  `#65ff68`  `#dbff99` | ![](i/colors-121i.png) |
+| ![](i/colors-122_001.png)   ![](i/colors-122i_001.png) | 122° | ![](i/colors-122.png) | `#003201`  `#006603`  `#00e507`  `#65ff6b`  `#d9ff99` | ![](i/colors-122i.png) |
+| ![](i/colors-123_001.png)   ![](i/colors-123i_001.png) | 123° | ![](i/colors-123.png) | `#003202`  `#006605`  `#00e50b`  `#65ff6d`  `#d7ff99` | ![](i/colors-123i.png) |
+| ![](i/colors-124_001.png)   ![](i/colors-124i_001.png) | 124° | ![](i/colors-124.png) | `#003203`  `#006606`  `#00e50f`  `#65ff70`  `#d6ff99` | ![](i/colors-124i.png) |
+| ![](i/colors-125_001.png)   ![](i/colors-125i_001.png) | 125° | ![](i/colors-125.png) | `#003204`  `#006608`  `#00e513`  `#65ff72`  `#d4ff99` | ![](i/colors-125i.png) |
+| ![](i/colors-126_001.png)   ![](i/colors-126i_001.png) | 126° | ![](i/colors-126.png) | `#003205`  `#00660a`  `#00e516`  `#65ff75`  `#d2ff99` | ![](i/colors-126i.png) |
+| ![](i/colors-127_001.png)   ![](i/colors-127i_001.png) | 127° | ![](i/colors-127.png) | `#003205`  `#00660b`  `#00e51a`  `#65ff77`  `#d1ff99` | ![](i/colors-127i.png) |
+| ![](i/colors-128_001.png)   ![](i/colors-128i_001.png) | 128° | ![](i/colors-128.png) | `#003206`  `#00660d`  `#00e51e`  `#65ff7a`  `#cfff99` | ![](i/colors-128i.png) |
+| ![](i/colors-129_001.png)   ![](i/colors-129i_001.png) | 129° | ![](i/colors-129.png) | `#003207`  `#00660f`  `#00e522`  `#65ff7c`  `#cdff99` | ![](i/colors-129i.png) |
+| ![](i/colors-130_001.png)   ![](i/colors-130i_001.png) | 130° | ![](i/colors-130.png) | `#003208`  `#006610`  `#00e526`  `#65ff7f`  `#ccff99` | ![](i/colors-130i.png) |
+| ![](i/colors-131_001.png)   ![](i/colors-131i_001.png) | 131° | ![](i/colors-131.png) | `#003209`  `#006612`  `#00e52a`  `#65ff82`  `#caff99` | ![](i/colors-131i.png) |
+| ![](i/colors-132_001.png)   ![](i/colors-132i_001.png) | 132° | ![](i/colors-132.png) | `#00320a`  `#006614`  `#00e52d`  `#65ff84`  `#c8ff99` | ![](i/colors-132i.png) |
+| ![](i/colors-133_001.png)   ![](i/colors-133i_001.png) | 133° | ![](i/colors-133.png) | `#00320b`  `#006616`  `#00e531`  `#65ff87`  `#c6ff99` | ![](i/colors-133i.png) |
+| ![](i/colors-134_001.png)   ![](i/colors-134i_001.png) | 134° | ![](i/colors-134.png) | `#00320b`  `#006617`  `#00e535`  `#65ff89`  `#c5ff99` | ![](i/colors-134i.png) |
+| ![](i/colors-135_001.png)   ![](i/colors-135i_001.png) | 135° | ![](i/colors-135.png) | `#00320c`  `#006619`  `#00e539`  `#65ff8c`  `#c3ff99` | ![](i/colors-135i.png) |
+| ![](i/colors-136_001.png)   ![](i/colors-136i_001.png) | 136° | ![](i/colors-136.png) | `#00320d`  `#00661b`  `#00e53d`  `#65ff8e`  `#c1ff99` | ![](i/colors-136i.png) |
+| ![](i/colors-137_001.png)   ![](i/colors-137i_001.png) | 137° | ![](i/colors-137.png) | `#00320e`  `#00661c`  `#00e541`  `#65ff91`  `#c0ff99` | ![](i/colors-137i.png) |
+| ![](i/colors-138_001.png)   ![](i/colors-138i_001.png) | 138° | ![](i/colors-138.png) | `#00320f`  `#00661e`  `#00e544`  `#65ff93`  `#beff99` | ![](i/colors-138i.png) |
+| ![](i/colors-139_001.png)   ![](i/colors-139i_001.png) | 139° | ![](i/colors-139.png) | `#003210`  `#006620`  `#00e548`  `#65ff96`  `#bcff99` | ![](i/colors-139i.png) |
+| ![](i/colors-140_001.png)   ![](i/colors-140i_001.png) | 140° | ![](i/colors-140.png) | `#003211`  `#006622`  `#00e54c`  `#65ff99`  `#bbff99` | ![](i/colors-140i.png) |
+| ![](i/colors-141_001.png)   ![](i/colors-141i_001.png) | 141° | ![](i/colors-141.png) | `#003211`  `#006623`  `#00e550`  `#65ff9b`  `#b9ff99` | ![](i/colors-141i.png) |
+| ![](i/colors-142_001.png)   ![](i/colors-142i_001.png) | 142° | ![](i/colors-142.png) | `#003212`  `#006625`  `#00e554`  `#65ff9e`  `#b7ff99` | ![](i/colors-142i.png) |
+| ![](i/colors-143_001.png)   ![](i/colors-143i_001.png) | 143° | ![](i/colors-143.png) | `#003213`  `#006627`  `#00e557`  `#65ffa0`  `#b5ff99` | ![](i/colors-143i.png) |
+| ![](i/colors-144_001.png)   ![](i/colors-144i_001.png) | 144° | ![](i/colors-144.png) | `#003214`  `#006628`  `#00e55b`  `#65ffa3`  `#b4ff99` | ![](i/colors-144i.png) |
+| ![](i/colors-145_001.png)   ![](i/colors-145i_001.png) | 145° | ![](i/colors-145.png) | `#003215`  `#00662a`  `#00e55f`  `#65ffa5`  `#b2ff99` | ![](i/colors-145i.png) |
+| ![](i/colors-146_001.png)   ![](i/colors-146i_001.png) | 146° | ![](i/colors-146.png) | `#003216`  `#00662c`  `#00e563`  `#65ffa8`  `#b0ff99` | ![](i/colors-146i.png) |
+| ![](i/colors-147_001.png)   ![](i/colors-147i_001.png) | 147° | ![](i/colors-147.png) | `#003216`  `#00662d`  `#00e567`  `#65ffaa`  `#afff99` | ![](i/colors-147i.png) |
+| ![](i/colors-148_001.png)   ![](i/colors-148i_001.png) | 148° | ![](i/colors-148.png) | `#003217`  `#00662f`  `#00e56b`  `#65ffad`  `#adff99` | ![](i/colors-148i.png) |
+| ![](i/colors-149_001.png)   ![](i/colors-149i_001.png) | 149° | ![](i/colors-149.png) | `#003218`  `#006631`  `#00e56e`  `#65ffaf`  `#abff99` | ![](i/colors-149i.png) |
+| ![](i/colors-150_001.png)   ![](i/colors-150i_001.png) | 150° | ![](i/colors-150.png) | `#003219`  `#006633`  `#00e572`  `#65ffb2`  `#aaff99` | ![](i/colors-150i.png) |
+| ![](i/colors-151_001.png)   ![](i/colors-151i_001.png) | 151° | ![](i/colors-151.png) | `#00321a`  `#006634`  `#00e576`  `#65ffb5`  `#a8ff99` | ![](i/colors-151i.png) |
+| ![](i/colors-152_001.png)   ![](i/colors-152i_001.png) | 152° | ![](i/colors-152.png) | `#00321b`  `#006636`  `#00e57a`  `#65ffb7`  `#a6ff99` | ![](i/colors-152i.png) |
+| ![](i/colors-153_001.png)   ![](i/colors-153i_001.png) | 153° | ![](i/colors-153.png) | `#00321c`  `#006638`  `#00e57e`  `#65ffba`  `#a4ff99` | ![](i/colors-153i.png) |
+| ![](i/colors-154_001.png)   ![](i/colors-154i_001.png) | 154° | ![](i/colors-154.png) | `#00321c`  `#006639`  `#00e582`  `#65ffbc`  `#a3ff99` | ![](i/colors-154i.png) |
+| ![](i/colors-155_001.png)   ![](i/colors-155i_001.png) | 155° | ![](i/colors-155.png) | `#00321d`  `#00663b`  `#00e585`  `#65ffbf`  `#a1ff99` | ![](i/colors-155i.png) |
+| ![](i/colors-156_001.png)   ![](i/colors-156i_001.png) | 156° | ![](i/colors-156.png) | `#00321e`  `#00663d`  `#00e589`  `#65ffc1`  `#9fff99` | ![](i/colors-156i.png) |
+| ![](i/colors-157_001.png)   ![](i/colors-157i_001.png) | 157° | ![](i/colors-157.png) | `#00321f`  `#00663e`  `#00e58d`  `#65ffc4`  `#9eff99` | ![](i/colors-157i.png) |
+| ![](i/colors-158_001.png)   ![](i/colors-158i_001.png) | 158° | ![](i/colors-158.png) | `#003220`  `#006640`  `#00e591`  `#65ffc6`  `#9cff99` | ![](i/colors-158i.png) |
+| ![](i/colors-159_001.png)   ![](i/colors-159i_001.png) | 159° | ![](i/colors-159.png) | `#003221`  `#006642`  `#00e595`  `#65ffc9`  `#9aff99` | ![](i/colors-159i.png) |
+| ![](i/colors-160_001.png)   ![](i/colors-160i_001.png) | 160° | ![](i/colors-160.png) | `#003221`  `#006643`  `#00e598`  `#65ffcb`  `#99ff99` | ![](i/colors-160i.png) |
+| ![](i/colors-161_001.png)   ![](i/colors-161i_001.png) | 161° | ![](i/colors-161.png) | `#003222`  `#006645`  `#00e59c`  `#65ffce`  `#99ff9a` | ![](i/colors-161i.png) |
+| ![](i/colors-162_001.png)   ![](i/colors-162i_001.png) | 162° | ![](i/colors-162.png) | `#003223`  `#006647`  `#00e5a0`  `#65ffd1`  `#99ff9c` | ![](i/colors-162i.png) |
+| ![](i/colors-163_001.png)   ![](i/colors-163i_001.png) | 163° | ![](i/colors-163.png) | `#003224`  `#006649`  `#00e5a4`  `#65ffd3`  `#99ff9e` | ![](i/colors-163i.png) |
+| ![](i/colors-164_001.png)   ![](i/colors-164i_001.png) | 164° | ![](i/colors-164.png) | `#003225`  `#00664a`  `#00e5a8`  `#65ffd6`  `#99ff9f` | ![](i/colors-164i.png) |
+| ![](i/colors-165_001.png)   ![](i/colors-165i_001.png) | 165° | ![](i/colors-165.png) | `#003226`  `#00664c`  `#00e5ac`  `#65ffd8`  `#99ffa1` | ![](i/colors-165i.png) |
+| ![](i/colors-166_001.png)   ![](i/colors-166i_001.png) | 166° | ![](i/colors-166.png) | `#003227`  `#00664e`  `#00e5af`  `#65ffdb`  `#99ffa3` | ![](i/colors-166i.png) |
+| ![](i/colors-167_001.png)   ![](i/colors-167i_001.png) | 167° | ![](i/colors-167.png) | `#003227`  `#00664f`  `#00e5b3`  `#65ffdd`  `#99ffa4` | ![](i/colors-167i.png) |
+| ![](i/colors-168_001.png)   ![](i/colors-168i_001.png) | 168° | ![](i/colors-168.png) | `#003228`  `#006651`  `#00e5b7`  `#65ffe0`  `#99ffa6` | ![](i/colors-168i.png) |
+| ![](i/colors-169_001.png)   ![](i/colors-169i_001.png) | 169° | ![](i/colors-169.png) | `#003229`  `#006653`  `#00e5bb`  `#65ffe2`  `#99ffa8` | ![](i/colors-169i.png) |
+| ![](i/colors-170_001.png)   ![](i/colors-170i_001.png) | 170° | ![](i/colors-170.png) | `#00322a`  `#006655`  `#00e5bf`  `#65ffe5`  `#99ffaa` | ![](i/colors-170i.png) |
+| ![](i/colors-171_001.png)   ![](i/colors-171i_001.png) | 171° | ![](i/colors-171.png) | `#00322b`  `#006656`  `#00e5c3`  `#65ffe8`  `#99ffab` | ![](i/colors-171i.png) |
+| ![](i/colors-172_001.png)   ![](i/colors-172i_001.png) | 172° | ![](i/colors-172.png) | `#00322c`  `#006658`  `#00e5c6`  `#65ffea`  `#99ffad` | ![](i/colors-172i.png) |
+| ![](i/colors-173_001.png)   ![](i/colors-173i_001.png) | 173° | ![](i/colors-173.png) | `#00322d`  `#00665a`  `#00e5ca`  `#65ffed`  `#99ffaf` | ![](i/colors-173i.png) |
+| ![](i/colors-174_001.png)   ![](i/colors-174i_001.png) | 174° | ![](i/colors-174.png) | `#00322d`  `#00665b`  `#00e5ce`  `#65ffef`  `#99ffb0` | ![](i/colors-174i.png) |
+| ![](i/colors-175_001.png)   ![](i/colors-175i_001.png) | 175° | ![](i/colors-175.png) | `#00322e`  `#00665d`  `#00e5d2`  `#65fff2`  `#99ffb2` | ![](i/colors-175i.png) |
+| ![](i/colors-176_001.png)   ![](i/colors-176i_001.png) | 176° | ![](i/colors-176.png) | `#00322f`  `#00665f`  `#00e5d6`  `#65fff4`  `#99ffb4` | ![](i/colors-176i.png) |
+| ![](i/colors-177_001.png)   ![](i/colors-177i_001.png) | 177° | ![](i/colors-177.png) | `#003230`  `#006660`  `#00e5da`  `#65fff7`  `#99ffb5` | ![](i/colors-177i.png) |
+| ![](i/colors-178_001.png)   ![](i/colors-178i_001.png) | 178° | ![](i/colors-178.png) | `#003231`  `#006662`  `#00e5dd`  `#65fff9`  `#99ffb7` | ![](i/colors-178i.png) |
+| ![](i/colors-179_001.png)   ![](i/colors-179i_001.png) | 179° | ![](i/colors-179.png) | `#003232`  `#006664`  `#00e5e1`  `#65fffc`  `#99ffb9` | ![](i/colors-179i.png) |
+| ![](i/colors-180_001.png)   ![](i/colors-180i_001.png) | 180° | ![](i/colors-180.png) | `#003232`  `#006666`  `#00e5e5`  `#65ffff`  `#99ffbb` | ![](i/colors-180i.png) |
+| ![](i/colors-181_001.png)   ![](i/colors-181i_001.png) | 181° | ![](i/colors-181.png) | `#003232`  `#006466`  `#00e1e5`  `#65fcff`  `#99ffbc` | ![](i/colors-181i.png) |
+| ![](i/colors-182_001.png)   ![](i/colors-182i_001.png) | 182° | ![](i/colors-182.png) | `#003132`  `#006266`  `#00dde5`  `#65f9ff`  `#99ffbe` | ![](i/colors-182i.png) |
+| ![](i/colors-183_001.png)   ![](i/colors-183i_001.png) | 183° | ![](i/colors-183.png) | `#003032`  `#006066`  `#00dae5`  `#65f7ff`  `#99ffc0` | ![](i/colors-183i.png) |
+| ![](i/colors-184_001.png)   ![](i/colors-184i_001.png) | 184° | ![](i/colors-184.png) | `#002f32`  `#005f66`  `#00d6e5`  `#65f4ff`  `#99ffc1` | ![](i/colors-184i.png) |
+| ![](i/colors-185_001.png)   ![](i/colors-185i_001.png) | 185° | ![](i/colors-185.png) | `#002e32`  `#005d66`  `#00d2e5`  `#65f2ff`  `#99ffc3` | ![](i/colors-185i.png) |
+| ![](i/colors-186_001.png)   ![](i/colors-186i_001.png) | 186° | ![](i/colors-186.png) | `#002d32`  `#005b66`  `#00cee5`  `#65efff`  `#99ffc5` | ![](i/colors-186i.png) |
+| ![](i/colors-187_001.png)   ![](i/colors-187i_001.png) | 187° | ![](i/colors-187.png) | `#002d32`  `#005a66`  `#00cae5`  `#65edff`  `#99ffc6` | ![](i/colors-187i.png) |
+| ![](i/colors-188_001.png)   ![](i/colors-188i_001.png) | 188° | ![](i/colors-188.png) | `#002c32`  `#005866`  `#00c6e5`  `#65eaff`  `#99ffc8` | ![](i/colors-188i.png) |
+| ![](i/colors-189_001.png)   ![](i/colors-189i_001.png) | 189° | ![](i/colors-189.png) | `#002b32`  `#005666`  `#00c3e5`  `#65e8ff`  `#99ffca` | ![](i/colors-189i.png) |
+| ![](i/colors-190_001.png)   ![](i/colors-190i_001.png) | 190° | ![](i/colors-190.png) | `#002a32`  `#005566`  `#00bfe5`  `#65e5ff`  `#99ffcc` | ![](i/colors-190i.png) |
+| ![](i/colors-191_001.png)   ![](i/colors-191i_001.png) | 191° | ![](i/colors-191.png) | `#002932`  `#005366`  `#00bbe5`  `#65e2ff`  `#99ffcd` | ![](i/colors-191i.png) |
+| ![](i/colors-192_001.png)   ![](i/colors-192i_001.png) | 192° | ![](i/colors-192.png) | `#002832`  `#005166`  `#00b7e5`  `#65e0ff`  `#99ffcf` | ![](i/colors-192i.png) |
+| ![](i/colors-193_001.png)   ![](i/colors-193i_001.png) | 193° | ![](i/colors-193.png) | `#002732`  `#004f66`  `#00b3e5`  `#65ddff`  `#99ffd1` | ![](i/colors-193i.png) |
+| ![](i/colors-194_001.png)   ![](i/colors-194i_001.png) | 194° | ![](i/colors-194.png) | `#002732`  `#004e66`  `#00afe5`  `#65dbff`  `#99ffd2` | ![](i/colors-194i.png) |
+| ![](i/colors-195_001.png)   ![](i/colors-195i_001.png) | 195° | ![](i/colors-195.png) | `#002632`  `#004c66`  `#00ace5`  `#65d8ff`  `#99ffd4` | ![](i/colors-195i.png) |
+| ![](i/colors-196_001.png)   ![](i/colors-196i_001.png) | 196° | ![](i/colors-196.png) | `#002532`  `#004a66`  `#00a8e5`  `#65d6ff`  `#99ffd6` | ![](i/colors-196i.png) |
+| ![](i/colors-197_001.png)   ![](i/colors-197i_001.png) | 197° | ![](i/colors-197.png) | `#002432`  `#004966`  `#00a4e5`  `#65d3ff`  `#99ffd7` | ![](i/colors-197i.png) |
+| ![](i/colors-198_001.png)   ![](i/colors-198i_001.png) | 198° | ![](i/colors-198.png) | `#002332`  `#004766`  `#00a0e5`  `#65d1ff`  `#99ffd9` | ![](i/colors-198i.png) |
+| ![](i/colors-199_001.png)   ![](i/colors-199i_001.png) | 199° | ![](i/colors-199.png) | `#002232`  `#004566`  `#009ce5`  `#65ceff`  `#99ffdb` | ![](i/colors-199i.png) |
+| ![](i/colors-200_001.png)   ![](i/colors-200i_001.png) | 200° | ![](i/colors-200.png) | `#002132`  `#004366`  `#0098e5`  `#65cbff`  `#99ffdd` | ![](i/colors-200i.png) |
+| ![](i/colors-201_001.png)   ![](i/colors-201i_001.png) | 201° | ![](i/colors-201.png) | `#002132`  `#004266`  `#0095e5`  `#65c9ff`  `#99ffde` | ![](i/colors-201i.png) |
+| ![](i/colors-202_001.png)   ![](i/colors-202i_001.png) | 202° | ![](i/colors-202.png) | `#002032`  `#004066`  `#0091e5`  `#65c6ff`  `#99ffe0` | ![](i/colors-202i.png) |
+| ![](i/colors-203_001.png)   ![](i/colors-203i_001.png) | 203° | ![](i/colors-203.png) | `#001f32`  `#003e66`  `#008de5`  `#65c4ff`  `#99ffe2` | ![](i/colors-203i.png) |
+| ![](i/colors-204_001.png)   ![](i/colors-204i_001.png) | 204° | ![](i/colors-204.png) | `#001e32`  `#003d66`  `#0089e5`  `#65c1ff`  `#99ffe3` | ![](i/colors-204i.png) |
+| ![](i/colors-205_001.png)   ![](i/colors-205i_001.png) | 205° | ![](i/colors-205.png) | `#001d32`  `#003b66`  `#0085e5`  `#65bfff`  `#99ffe5` | ![](i/colors-205i.png) |
+| ![](i/colors-206_001.png)   ![](i/colors-206i_001.png) | 206° | ![](i/colors-206.png) | `#001c32`  `#003966`  `#0082e5`  `#65bcff`  `#99ffe7` | ![](i/colors-206i.png) |
+| ![](i/colors-207_001.png)   ![](i/colors-207i_001.png) | 207° | ![](i/colors-207.png) | `#001c32`  `#003866`  `#007ee5`  `#65baff`  `#99ffe8` | ![](i/colors-207i.png) |
+| ![](i/colors-208_001.png)   ![](i/colors-208i_001.png) | 208° | ![](i/colors-208.png) | `#001b32`  `#003666`  `#007ae5`  `#65b7ff`  `#99ffea` | ![](i/colors-208i.png) |
+| ![](i/colors-209_001.png)   ![](i/colors-209i_001.png) | 209° | ![](i/colors-209.png) | `#001a32`  `#003466`  `#0076e5`  `#65b5ff`  `#99ffec` | ![](i/colors-209i.png) |
+| ![](i/colors-210_001.png)   ![](i/colors-210i_001.png) | 210° | ![](i/colors-210.png) | `#001932`  `#003366`  `#0072e5`  `#65b2ff`  `#99ffee` | ![](i/colors-210i.png) |
+| ![](i/colors-211_001.png)   ![](i/colors-211i_001.png) | 211° | ![](i/colors-211.png) | `#001832`  `#003166`  `#006ee5`  `#65afff`  `#99ffef` | ![](i/colors-211i.png) |
+| ![](i/colors-212_001.png)   ![](i/colors-212i_001.png) | 212° | ![](i/colors-212.png) | `#001732`  `#002f66`  `#006be5`  `#65adff`  `#99fff1` | ![](i/colors-212i.png) |
+| ![](i/colors-213_001.png)   ![](i/colors-213i_001.png) | 213° | ![](i/colors-213.png) | `#001632`  `#002d66`  `#0067e5`  `#65aaff`  `#99fff3` | ![](i/colors-213i.png) |
+| ![](i/colors-214_001.png)   ![](i/colors-214i_001.png) | 214° | ![](i/colors-214.png) | `#001632`  `#002c66`  `#0063e5`  `#65a8ff`  `#99fff4` | ![](i/colors-214i.png) |
+| ![](i/colors-215_001.png)   ![](i/colors-215i_001.png) | 215° | ![](i/colors-215.png) | `#001532`  `#002a66`  `#005fe5`  `#65a5ff`  `#99fff6` | ![](i/colors-215i.png) |
+| ![](i/colors-216_001.png)   ![](i/colors-216i_001.png) | 216° | ![](i/colors-216.png) | `#001432`  `#002866`  `#005be5`  `#65a3ff`  `#99fff8` | ![](i/colors-216i.png) |
+| ![](i/colors-217_001.png)   ![](i/colors-217i_001.png) | 217° | ![](i/colors-217.png) | `#001332`  `#002766`  `#0057e5`  `#65a0ff`  `#99fff9` | ![](i/colors-217i.png) |
+| ![](i/colors-218_001.png)   ![](i/colors-218i_001.png) | 218° | ![](i/colors-218.png) | `#001232`  `#002566`  `#0054e5`  `#659eff`  `#99fffb` | ![](i/colors-218i.png) |
+| ![](i/colors-219_001.png)   ![](i/colors-219i_001.png) | 219° | ![](i/colors-219.png) | `#001132`  `#002366`  `#0050e5`  `#659bff`  `#99fffd` | ![](i/colors-219i.png) |
+| ![](i/colors-220_001.png)   ![](i/colors-220i_001.png) | 220° | ![](i/colors-220.png) | `#001132`  `#002266`  `#004ce5`  `#6599ff`  `#99ffff` | ![](i/colors-220i.png) |
+| ![](i/colors-221_001.png)   ![](i/colors-221i_001.png) | 221° | ![](i/colors-221.png) | `#001032`  `#002066`  `#0048e5`  `#6596ff`  `#99fdff` | ![](i/colors-221i.png) |
+| ![](i/colors-222_001.png)   ![](i/colors-222i_001.png) | 222° | ![](i/colors-222.png) | `#000f32`  `#001e66`  `#0044e5`  `#6593ff`  `#99fbff` | ![](i/colors-222i.png) |
+| ![](i/colors-223_001.png)   ![](i/colors-223i_001.png) | 223° | ![](i/colors-223.png) | `#000e32`  `#001c66`  `#0041e5`  `#6591ff`  `#99f9ff` | ![](i/colors-223i.png) |
+| ![](i/colors-224_001.png)   ![](i/colors-224i_001.png) | 224° | ![](i/colors-224.png) | `#000d32`  `#001b66`  `#003de5`  `#658eff`  `#99f8ff` | ![](i/colors-224i.png) |
+| ![](i/colors-225_001.png)   ![](i/colors-225i_001.png) | 225° | ![](i/colors-225.png) | `#000c32`  `#001966`  `#0039e5`  `#658cff`  `#99f6ff` | ![](i/colors-225i.png) |
+| ![](i/colors-226_001.png)   ![](i/colors-226i_001.png) | 226° | ![](i/colors-226.png) | `#000b32`  `#001766`  `#0035e5`  `#6589ff`  `#99f4ff` | ![](i/colors-226i.png) |
+| ![](i/colors-227_001.png)   ![](i/colors-227i_001.png) | 227° | ![](i/colors-227.png) | `#000b32`  `#001666`  `#0031e5`  `#6587ff`  `#99f3ff` | ![](i/colors-227i.png) |
+| ![](i/colors-228_001.png)   ![](i/colors-228i_001.png) | 228° | ![](i/colors-228.png) | `#000a32`  `#001466`  `#002de5`  `#6584ff`  `#99f1ff` | ![](i/colors-228i.png) |
+| ![](i/colors-229_001.png)   ![](i/colors-229i_001.png) | 229° | ![](i/colors-229.png) | `#000932`  `#001266`  `#002ae5`  `#6582ff`  `#99efff` | ![](i/colors-229i.png) |
+| ![](i/colors-230_001.png)   ![](i/colors-230i_001.png) | 230° | ![](i/colors-230.png) | `#000832`  `#001066`  `#0026e5`  `#657fff`  `#99eeff` | ![](i/colors-230i.png) |
+| ![](i/colors-231_001.png)   ![](i/colors-231i_001.png) | 231° | ![](i/colors-231.png) | `#000732`  `#000f66`  `#0022e5`  `#657cff`  `#99ecff` | ![](i/colors-231i.png) |
+| ![](i/colors-232_001.png)   ![](i/colors-232i_001.png) | 232° | ![](i/colors-232.png) | `#000632`  `#000d66`  `#001ee5`  `#657aff`  `#99eaff` | ![](i/colors-232i.png) |
+| ![](i/colors-233_001.png)   ![](i/colors-233i_001.png) | 233° | ![](i/colors-233.png) | `#000532`  `#000b66`  `#001ae5`  `#6577ff`  `#99e8ff` | ![](i/colors-233i.png) |
+| ![](i/colors-234_001.png)   ![](i/colors-234i_001.png) | 234° | ![](i/colors-234.png) | `#000532`  `#000a66`  `#0016e5`  `#6575ff`  `#99e7ff` | ![](i/colors-234i.png) |
+| ![](i/colors-235_001.png)   ![](i/colors-235i_001.png) | 235° | ![](i/colors-235.png) | `#000432`  `#000866`  `#0013e5`  `#6572ff`  `#99e5ff` | ![](i/colors-235i.png) |
+| ![](i/colors-236_001.png)   ![](i/colors-236i_001.png) | 236° | ![](i/colors-236.png) | `#000332`  `#000666`  `#000fe5`  `#6570ff`  `#99e3ff` | ![](i/colors-236i.png) |
+| ![](i/colors-237_001.png)   ![](i/colors-237i_001.png) | 237° | ![](i/colors-237.png) | `#000232`  `#000566`  `#000be5`  `#656dff`  `#99e2ff` | ![](i/colors-237i.png) |
+| ![](i/colors-238_001.png)   ![](i/colors-238i_001.png) | 238° | ![](i/colors-238.png) | `#000132`  `#000366`  `#0007e5`  `#656bff`  `#99e0ff` | ![](i/colors-238i.png) |
+| ![](i/colors-239_001.png)   ![](i/colors-239i_001.png) | 239° | ![](i/colors-239.png) | `#000032`  `#000166`  `#0003e5`  `#6568ff`  `#99deff` | ![](i/colors-239i.png) |
+| ![](i/colors-240_001.png)   ![](i/colors-240i_001.png) | 240° | ![](i/colors-240.png) | `#000032`  `#000066`  `#0000e5`  `#6565ff`  `#99ddff` | ![](i/colors-240i.png) |
+| ![](i/colors-241_001.png)   ![](i/colors-241i_001.png) | 241° | ![](i/colors-241.png) | `#000032`  `#010066`  `#0300e5`  `#6865ff`  `#99dbff` | ![](i/colors-241i.png) |
+| ![](i/colors-242_001.png)   ![](i/colors-242i_001.png) | 242° | ![](i/colors-242.png) | `#010032`  `#030066`  `#0700e5`  `#6b65ff`  `#99d9ff` | ![](i/colors-242i.png) |
+| ![](i/colors-243_001.png)   ![](i/colors-243i_001.png) | 243° | ![](i/colors-243.png) | `#020032`  `#050066`  `#0b00e5`  `#6d65ff`  `#99d7ff` | ![](i/colors-243i.png) |
+| ![](i/colors-244_001.png)   ![](i/colors-244i_001.png) | 244° | ![](i/colors-244.png) | `#030032`  `#060066`  `#0f00e5`  `#7065ff`  `#99d6ff` | ![](i/colors-244i.png) |
+| ![](i/colors-245_001.png)   ![](i/colors-245i_001.png) | 245° | ![](i/colors-245.png) | `#040032`  `#080066`  `#1300e5`  `#7265ff`  `#99d4ff` | ![](i/colors-245i.png) |
+| ![](i/colors-246_001.png)   ![](i/colors-246i_001.png) | 246° | ![](i/colors-246.png) | `#050032`  `#0a0066`  `#1600e5`  `#7565ff`  `#99d2ff` | ![](i/colors-246i.png) |
+| ![](i/colors-247_001.png)   ![](i/colors-247i_001.png) | 247° | ![](i/colors-247.png) | `#050032`  `#0b0066`  `#1a00e5`  `#7765ff`  `#99d1ff` | ![](i/colors-247i.png) |
+| ![](i/colors-248_001.png)   ![](i/colors-248i_001.png) | 248° | ![](i/colors-248.png) | `#060032`  `#0d0066`  `#1e00e5`  `#7a65ff`  `#99cfff` | ![](i/colors-248i.png) |
+| ![](i/colors-249_001.png)   ![](i/colors-249i_001.png) | 249° | ![](i/colors-249.png) | `#070032`  `#0f0066`  `#2200e5`  `#7c65ff`  `#99cdff` | ![](i/colors-249i.png) |
+| ![](i/colors-250_001.png)   ![](i/colors-250i_001.png) | 250° | ![](i/colors-250.png) | `#080032`  `#110066`  `#2600e5`  `#7f65ff`  `#99ccff` | ![](i/colors-250i.png) |
+| ![](i/colors-251_001.png)   ![](i/colors-251i_001.png) | 251° | ![](i/colors-251.png) | `#090032`  `#120066`  `#2a00e5`  `#8265ff`  `#99caff` | ![](i/colors-251i.png) |
+| ![](i/colors-252_001.png)   ![](i/colors-252i_001.png) | 252° | ![](i/colors-252.png) | `#0a0032`  `#140066`  `#2d00e5`  `#8465ff`  `#99c8ff` | ![](i/colors-252i.png) |
+| ![](i/colors-253_001.png)   ![](i/colors-253i_001.png) | 253° | ![](i/colors-253.png) | `#0b0032`  `#160066`  `#3100e5`  `#8765ff`  `#99c6ff` | ![](i/colors-253i.png) |
+| ![](i/colors-254_001.png)   ![](i/colors-254i_001.png) | 254° | ![](i/colors-254.png) | `#0b0032`  `#170066`  `#3500e5`  `#8965ff`  `#99c5ff` | ![](i/colors-254i.png) |
+| ![](i/colors-255_001.png)   ![](i/colors-255i_001.png) | 255° | ![](i/colors-255.png) | `#0c0032`  `#190066`  `#3900e5`  `#8c65ff`  `#99c3ff` | ![](i/colors-255i.png) |
+| ![](i/colors-256_001.png)   ![](i/colors-256i_001.png) | 256° | ![](i/colors-256.png) | `#0d0032`  `#1b0066`  `#3d00e5`  `#8e65ff`  `#99c1ff` | ![](i/colors-256i.png) |
+| ![](i/colors-257_001.png)   ![](i/colors-257i_001.png) | 257° | ![](i/colors-257.png) | `#0e0032`  `#1c0066`  `#4100e5`  `#9165ff`  `#99c0ff` | ![](i/colors-257i.png) |
+| ![](i/colors-258_001.png)   ![](i/colors-258i_001.png) | 258° | ![](i/colors-258.png) | `#0f0032`  `#1e0066`  `#4400e5`  `#9365ff`  `#99beff` | ![](i/colors-258i.png) |
+| ![](i/colors-259_001.png)   ![](i/colors-259i_001.png) | 259° | ![](i/colors-259.png) | `#100032`  `#200066`  `#4800e5`  `#9665ff`  `#99bcff` | ![](i/colors-259i.png) |
+| ![](i/colors-260_001.png)   ![](i/colors-260i_001.png) | 260° | ![](i/colors-260.png) | `#100032`  `#210066`  `#4c00e5`  `#9865ff`  `#99bbff` | ![](i/colors-260i.png) |
+| ![](i/colors-261_001.png)   ![](i/colors-261i_001.png) | 261° | ![](i/colors-261.png) | `#110032`  `#230066`  `#5000e5`  `#9b65ff`  `#99b9ff` | ![](i/colors-261i.png) |
+| ![](i/colors-262_001.png)   ![](i/colors-262i_001.png) | 262° | ![](i/colors-262.png) | `#120032`  `#250066`  `#5400e5`  `#9e65ff`  `#99b7ff` | ![](i/colors-262i.png) |
+| ![](i/colors-263_001.png)   ![](i/colors-263i_001.png) | 263° | ![](i/colors-263.png) | `#130032`  `#270066`  `#5700e5`  `#a065ff`  `#99b5ff` | ![](i/colors-263i.png) |
+| ![](i/colors-264_001.png)   ![](i/colors-264i_001.png) | 264° | ![](i/colors-264.png) | `#140032`  `#280066`  `#5b00e5`  `#a365ff`  `#99b4ff` | ![](i/colors-264i.png) |
+| ![](i/colors-265_001.png)   ![](i/colors-265i_001.png) | 265° | ![](i/colors-265.png) | `#150032`  `#2a0066`  `#5f00e5`  `#a565ff`  `#99b2ff` | ![](i/colors-265i.png) |
+| ![](i/colors-266_001.png)   ![](i/colors-266i_001.png) | 266° | ![](i/colors-266.png) | `#160032`  `#2c0066`  `#6300e5`  `#a865ff`  `#99b0ff` | ![](i/colors-266i.png) |
+| ![](i/colors-267_001.png)   ![](i/colors-267i_001.png) | 267° | ![](i/colors-267.png) | `#160032`  `#2d0066`  `#6700e5`  `#aa65ff`  `#99afff` | ![](i/colors-267i.png) |
+| ![](i/colors-268_001.png)   ![](i/colors-268i_001.png) | 268° | ![](i/colors-268.png) | `#170032`  `#2f0066`  `#6b00e5`  `#ad65ff`  `#99adff` | ![](i/colors-268i.png) |
+| ![](i/colors-269_001.png)   ![](i/colors-269i_001.png) | 269° | ![](i/colors-269.png) | `#180032`  `#310066`  `#6e00e5`  `#af65ff`  `#99abff` | ![](i/colors-269i.png) |
+| ![](i/colors-270_001.png)   ![](i/colors-270i_001.png) | 270° | ![](i/colors-270.png) | `#190032`  `#330066`  `#7200e5`  `#b265ff`  `#99aaff` | ![](i/colors-270i.png) |
+| ![](i/colors-271_001.png)   ![](i/colors-271i_001.png) | 271° | ![](i/colors-271.png) | `#1a0032`  `#340066`  `#7600e5`  `#b565ff`  `#99a8ff` | ![](i/colors-271i.png) |
+| ![](i/colors-272_001.png)   ![](i/colors-272i_001.png) | 272° | ![](i/colors-272.png) | `#1b0032`  `#360066`  `#7a00e5`  `#b765ff`  `#99a6ff` | ![](i/colors-272i.png) |
+| ![](i/colors-273_001.png)   ![](i/colors-273i_001.png) | 273° | ![](i/colors-273.png) | `#1c0032`  `#380066`  `#7e00e5`  `#ba65ff`  `#99a4ff` | ![](i/colors-273i.png) |
+| ![](i/colors-274_001.png)   ![](i/colors-274i_001.png) | 274° | ![](i/colors-274.png) | `#1c0032`  `#390066`  `#8200e5`  `#bc65ff`  `#99a3ff` | ![](i/colors-274i.png) |
+| ![](i/colors-275_001.png)   ![](i/colors-275i_001.png) | 275° | ![](i/colors-275.png) | `#1d0032`  `#3b0066`  `#8500e5`  `#bf65ff`  `#99a1ff` | ![](i/colors-275i.png) |
+| ![](i/colors-276_001.png)   ![](i/colors-276i_001.png) | 276° | ![](i/colors-276.png) | `#1e0032`  `#3d0066`  `#8900e5`  `#c165ff`  `#999fff` | ![](i/colors-276i.png) |
+| ![](i/colors-277_001.png)   ![](i/colors-277i_001.png) | 277° | ![](i/colors-277.png) | `#1f0032`  `#3e0066`  `#8d00e5`  `#c465ff`  `#999eff` | ![](i/colors-277i.png) |
+| ![](i/colors-278_001.png)   ![](i/colors-278i_001.png) | 278° | ![](i/colors-278.png) | `#200032`  `#400066`  `#9100e5`  `#c665ff`  `#999cff` | ![](i/colors-278i.png) |
+| ![](i/colors-279_001.png)   ![](i/colors-279i_001.png) | 279° | ![](i/colors-279.png) | `#210032`  `#420066`  `#9500e5`  `#c965ff`  `#999aff` | ![](i/colors-279i.png) |
+| ![](i/colors-280_001.png)   ![](i/colors-280i_001.png) | 280° | ![](i/colors-280.png) | `#220032`  `#440066`  `#9900e5`  `#cc65ff`  `#9999ff` | ![](i/colors-280i.png) |
+| ![](i/colors-281_001.png)   ![](i/colors-281i_001.png) | 281° | ![](i/colors-281.png) | `#220032`  `#450066`  `#9c00e5`  `#ce65ff`  `#9a99ff` | ![](i/colors-281i.png) |
+| ![](i/colors-282_001.png)   ![](i/colors-282i_001.png) | 282° | ![](i/colors-282.png) | `#230032`  `#470066`  `#a000e5`  `#d165ff`  `#9c99ff` | ![](i/colors-282i.png) |
+| ![](i/colors-283_001.png)   ![](i/colors-283i_001.png) | 283° | ![](i/colors-283.png) | `#240032`  `#490066`  `#a400e5`  `#d365ff`  `#9e99ff` | ![](i/colors-283i.png) |
+| ![](i/colors-284_001.png)   ![](i/colors-284i_001.png) | 284° | ![](i/colors-284.png) | `#250032`  `#4a0066`  `#a800e5`  `#d665ff`  `#9f99ff` | ![](i/colors-284i.png) |
+| ![](i/colors-285_001.png)   ![](i/colors-285i_001.png) | 285° | ![](i/colors-285.png) | `#260032`  `#4c0066`  `#ac00e5`  `#d865ff`  `#a199ff` | ![](i/colors-285i.png) |
+| ![](i/colors-286_001.png)   ![](i/colors-286i_001.png) | 286° | ![](i/colors-286.png) | `#270032`  `#4e0066`  `#af00e5`  `#db65ff`  `#a399ff` | ![](i/colors-286i.png) |
+| ![](i/colors-287_001.png)   ![](i/colors-287i_001.png) | 287° | ![](i/colors-287.png) | `#270032`  `#4f0066`  `#b300e5`  `#dd65ff`  `#a499ff` | ![](i/colors-287i.png) |
+| ![](i/colors-288_001.png)   ![](i/colors-288i_001.png) | 288° | ![](i/colors-288.png) | `#280032`  `#510066`  `#b700e5`  `#e065ff`  `#a699ff` | ![](i/colors-288i.png) |
+| ![](i/colors-289_001.png)   ![](i/colors-289i_001.png) | 289° | ![](i/colors-289.png) | `#290032`  `#530066`  `#bb00e5`  `#e265ff`  `#a899ff` | ![](i/colors-289i.png) |
+| ![](i/colors-290_001.png)   ![](i/colors-290i_001.png) | 290° | ![](i/colors-290.png) | `#2a0032`  `#540066`  `#bf00e5`  `#e565ff`  `#aa99ff` | ![](i/colors-290i.png) |
+| ![](i/colors-291_001.png)   ![](i/colors-291i_001.png) | 291° | ![](i/colors-291.png) | `#2b0032`  `#560066`  `#c300e5`  `#e865ff`  `#ab99ff` | ![](i/colors-291i.png) |
+| ![](i/colors-292_001.png)   ![](i/colors-292i_001.png) | 292° | ![](i/colors-292.png) | `#2c0032`  `#580066`  `#c600e5`  `#ea65ff`  `#ad99ff` | ![](i/colors-292i.png) |
+| ![](i/colors-293_001.png)   ![](i/colors-293i_001.png) | 293° | ![](i/colors-293.png) | `#2d0032`  `#5a0066`  `#ca00e5`  `#ed65ff`  `#af99ff` | ![](i/colors-293i.png) |
+| ![](i/colors-294_001.png)   ![](i/colors-294i_001.png) | 294° | ![](i/colors-294.png) | `#2d0032`  `#5b0066`  `#ce00e5`  `#ef65ff`  `#b099ff` | ![](i/colors-294i.png) |
+| ![](i/colors-295_001.png)   ![](i/colors-295i_001.png) | 295° | ![](i/colors-295.png) | `#2e0032`  `#5d0066`  `#d200e5`  `#f265ff`  `#b299ff` | ![](i/colors-295i.png) |
+| ![](i/colors-296_001.png)   ![](i/colors-296i_001.png) | 296° | ![](i/colors-296.png) | `#2f0032`  `#5f0066`  `#d600e5`  `#f465ff`  `#b499ff` | ![](i/colors-296i.png) |
+| ![](i/colors-297_001.png)   ![](i/colors-297i_001.png) | 297° | ![](i/colors-297.png) | `#300032`  `#600066`  `#da00e5`  `#f765ff`  `#b599ff` | ![](i/colors-297i.png) |
+| ![](i/colors-298_001.png)   ![](i/colors-298i_001.png) | 298° | ![](i/colors-298.png) | `#310032`  `#620066`  `#dd00e5`  `#f965ff`  `#b799ff` | ![](i/colors-298i.png) |
+| ![](i/colors-299_001.png)   ![](i/colors-299i_001.png) | 299° | ![](i/colors-299.png) | `#320032`  `#640066`  `#e100e5`  `#fc65ff`  `#b999ff` | ![](i/colors-299i.png) |
+| ![](i/colors-300_001.png)   ![](i/colors-300i_001.png) | 300° | ![](i/colors-300.png) | `#320032`  `#660066`  `#e500e5`  `#ff65ff`  `#bb99ff` | ![](i/colors-300i.png) |
+| ![](i/colors-301_001.png)   ![](i/colors-301i_001.png) | 301° | ![](i/colors-301.png) | `#320032`  `#660064`  `#e500e1`  `#ff65fc`  `#bc99ff` | ![](i/colors-301i.png) |
+| ![](i/colors-302_001.png)   ![](i/colors-302i_001.png) | 302° | ![](i/colors-302.png) | `#320031`  `#660062`  `#e500dd`  `#ff65f9`  `#be99ff` | ![](i/colors-302i.png) |
+| ![](i/colors-303_001.png)   ![](i/colors-303i_001.png) | 303° | ![](i/colors-303.png) | `#320030`  `#660060`  `#e500da`  `#ff65f7`  `#c099ff` | ![](i/colors-303i.png) |
+| ![](i/colors-304_001.png)   ![](i/colors-304i_001.png) | 304° | ![](i/colors-304.png) | `#32002f`  `#66005f`  `#e500d6`  `#ff65f4`  `#c199ff` | ![](i/colors-304i.png) |
+| ![](i/colors-305_001.png)   ![](i/colors-305i_001.png) | 305° | ![](i/colors-305.png) | `#32002e`  `#66005d`  `#e500d2`  `#ff65f2`  `#c399ff` | ![](i/colors-305i.png) |
+| ![](i/colors-306_001.png)   ![](i/colors-306i_001.png) | 306° | ![](i/colors-306.png) | `#32002d`  `#66005b`  `#e500ce`  `#ff65ef`  `#c599ff` | ![](i/colors-306i.png) |
+| ![](i/colors-307_001.png)   ![](i/colors-307i_001.png) | 307° | ![](i/colors-307.png) | `#32002d`  `#66005a`  `#e500ca`  `#ff65ed`  `#c699ff` | ![](i/colors-307i.png) |
+| ![](i/colors-308_001.png)   ![](i/colors-308i_001.png) | 308° | ![](i/colors-308.png) | `#32002c`  `#660058`  `#e500c6`  `#ff65ea`  `#c899ff` | ![](i/colors-308i.png) |
+| ![](i/colors-309_001.png)   ![](i/colors-309i_001.png) | 309° | ![](i/colors-309.png) | `#32002b`  `#660056`  `#e500c3`  `#ff65e8`  `#ca99ff` | ![](i/colors-309i.png) |
+| ![](i/colors-310_001.png)   ![](i/colors-310i_001.png) | 310° | ![](i/colors-310.png) | `#32002a`  `#660054`  `#e500bf`  `#ff65e5`  `#cc99ff` | ![](i/colors-310i.png) |
+| ![](i/colors-311_001.png)   ![](i/colors-311i_001.png) | 311° | ![](i/colors-311.png) | `#320029`  `#660053`  `#e500bb`  `#ff65e2`  `#cd99ff` | ![](i/colors-311i.png) |
+| ![](i/colors-312_001.png)   ![](i/colors-312i_001.png) | 312° | ![](i/colors-312.png) | `#320028`  `#660051`  `#e500b7`  `#ff65e0`  `#cf99ff` | ![](i/colors-312i.png) |
+| ![](i/colors-313_001.png)   ![](i/colors-313i_001.png) | 313° | ![](i/colors-313.png) | `#320027`  `#66004f`  `#e500b3`  `#ff65dd`  `#d199ff` | ![](i/colors-313i.png) |
+| ![](i/colors-314_001.png)   ![](i/colors-314i_001.png) | 314° | ![](i/colors-314.png) | `#320027`  `#66004e`  `#e500af`  `#ff65db`  `#d299ff` | ![](i/colors-314i.png) |
+| ![](i/colors-315_001.png)   ![](i/colors-315i_001.png) | 315° | ![](i/colors-315.png) | `#320026`  `#66004c`  `#e500ac`  `#ff65d8`  `#d499ff` | ![](i/colors-315i.png) |
+| ![](i/colors-316_001.png)   ![](i/colors-316i_001.png) | 316° | ![](i/colors-316.png) | `#320025`  `#66004a`  `#e500a8`  `#ff65d6`  `#d699ff` | ![](i/colors-316i.png) |
+| ![](i/colors-317_001.png)   ![](i/colors-317i_001.png) | 317° | ![](i/colors-317.png) | `#320024`  `#660049`  `#e500a4`  `#ff65d3`  `#d799ff` | ![](i/colors-317i.png) |
+| ![](i/colors-318_001.png)   ![](i/colors-318i_001.png) | 318° | ![](i/colors-318.png) | `#320023`  `#660047`  `#e500a0`  `#ff65d1`  `#d999ff` | ![](i/colors-318i.png) |
+| ![](i/colors-319_001.png)   ![](i/colors-319i_001.png) | 319° | ![](i/colors-319.png) | `#320022`  `#660045`  `#e5009c`  `#ff65ce`  `#db99ff` | ![](i/colors-319i.png) |
+| ![](i/colors-320_001.png)   ![](i/colors-320i_001.png) | 320° | ![](i/colors-320.png) | `#320022`  `#660044`  `#e50099`  `#ff65cc`  `#dd99ff` | ![](i/colors-320i.png) |
+| ![](i/colors-321_001.png)   ![](i/colors-321i_001.png) | 321° | ![](i/colors-321.png) | `#320021`  `#660042`  `#e50095`  `#ff65c9`  `#de99ff` | ![](i/colors-321i.png) |
+| ![](i/colors-322_001.png)   ![](i/colors-322i_001.png) | 322° | ![](i/colors-322.png) | `#320020`  `#660040`  `#e50091`  `#ff65c6`  `#e099ff` | ![](i/colors-322i.png) |
+| ![](i/colors-323_001.png)   ![](i/colors-323i_001.png) | 323° | ![](i/colors-323.png) | `#32001f`  `#66003e`  `#e5008d`  `#ff65c4`  `#e299ff` | ![](i/colors-323i.png) |
+| ![](i/colors-324_001.png)   ![](i/colors-324i_001.png) | 324° | ![](i/colors-324.png) | `#32001e`  `#66003d`  `#e50089`  `#ff65c1`  `#e399ff` | ![](i/colors-324i.png) |
+| ![](i/colors-325_001.png)   ![](i/colors-325i_001.png) | 325° | ![](i/colors-325.png) | `#32001d`  `#66003b`  `#e50085`  `#ff65bf`  `#e599ff` | ![](i/colors-325i.png) |
+| ![](i/colors-326_001.png)   ![](i/colors-326i_001.png) | 326° | ![](i/colors-326.png) | `#32001c`  `#660039`  `#e50082`  `#ff65bc`  `#e799ff` | ![](i/colors-326i.png) |
+| ![](i/colors-327_001.png)   ![](i/colors-327i_001.png) | 327° | ![](i/colors-327.png) | `#32001c`  `#660038`  `#e5007e`  `#ff65ba`  `#e899ff` | ![](i/colors-327i.png) |
+| ![](i/colors-328_001.png)   ![](i/colors-328i_001.png) | 328° | ![](i/colors-328.png) | `#32001b`  `#660036`  `#e5007a`  `#ff65b7`  `#ea99ff` | ![](i/colors-328i.png) |
+| ![](i/colors-329_001.png)   ![](i/colors-329i_001.png) | 329° | ![](i/colors-329.png) | `#32001a`  `#660034`  `#e50076`  `#ff65b5`  `#ec99ff` | ![](i/colors-329i.png) |
+| ![](i/colors-330_001.png)   ![](i/colors-330i_001.png) | 330° | ![](i/colors-330.png) | `#320019`  `#660033`  `#e50072`  `#ff65b2`  `#ee99ff` | ![](i/colors-330i.png) |
+| ![](i/colors-331_001.png)   ![](i/colors-331i_001.png) | 331° | ![](i/colors-331.png) | `#320018`  `#660031`  `#e5006e`  `#ff65af`  `#ef99ff` | ![](i/colors-331i.png) |
+| ![](i/colors-332_001.png)   ![](i/colors-332i_001.png) | 332° | ![](i/colors-332.png) | `#320017`  `#66002f`  `#e5006b`  `#ff65ad`  `#f199ff` | ![](i/colors-332i.png) |
+| ![](i/colors-333_001.png)   ![](i/colors-333i_001.png) | 333° | ![](i/colors-333.png) | `#320016`  `#66002d`  `#e50067`  `#ff65aa`  `#f399ff` | ![](i/colors-333i.png) |
+| ![](i/colors-334_001.png)   ![](i/colors-334i_001.png) | 334° | ![](i/colors-334.png) | `#320016`  `#66002c`  `#e50063`  `#ff65a8`  `#f499ff` | ![](i/colors-334i.png) |
+| ![](i/colors-335_001.png)   ![](i/colors-335i_001.png) | 335° | ![](i/colors-335.png) | `#320015`  `#66002a`  `#e5005f`  `#ff65a5`  `#f699ff` | ![](i/colors-335i.png) |
+| ![](i/colors-336_001.png)   ![](i/colors-336i_001.png) | 336° | ![](i/colors-336.png) | `#320014`  `#660028`  `#e5005b`  `#ff65a3`  `#f899ff` | ![](i/colors-336i.png) |
+| ![](i/colors-337_001.png)   ![](i/colors-337i_001.png) | 337° | ![](i/colors-337.png) | `#320013`  `#660027`  `#e50057`  `#ff65a0`  `#f999ff` | ![](i/colors-337i.png) |
+| ![](i/colors-338_001.png)   ![](i/colors-338i_001.png) | 338° | ![](i/colors-338.png) | `#320012`  `#660025`  `#e50054`  `#ff659e`  `#fb99ff` | ![](i/colors-338i.png) |
+| ![](i/colors-339_001.png)   ![](i/colors-339i_001.png) | 339° | ![](i/colors-339.png) | `#320011`  `#660023`  `#e50050`  `#ff659b`  `#fd99ff` | ![](i/colors-339i.png) |
+| ![](i/colors-340_001.png)   ![](i/colors-340i_001.png) | 340° | ![](i/colors-340.png) | `#320010`  `#660021`  `#e5004c`  `#ff6598`  `#ff99ff` | ![](i/colors-340i.png) |
+| ![](i/colors-341_001.png)   ![](i/colors-341i_001.png) | 341° | ![](i/colors-341.png) | `#320010`  `#660020`  `#e50048`  `#ff6596`  `#ff99fd` | ![](i/colors-341i.png) |
+| ![](i/colors-342_001.png)   ![](i/colors-342i_001.png) | 342° | ![](i/colors-342.png) | `#32000f`  `#66001e`  `#e50044`  `#ff6593`  `#ff99fb` | ![](i/colors-342i.png) |
+| ![](i/colors-343_001.png)   ![](i/colors-343i_001.png) | 343° | ![](i/colors-343.png) | `#32000e`  `#66001c`  `#e50041`  `#ff6591`  `#ff99f9` | ![](i/colors-343i.png) |
+| ![](i/colors-344_001.png)   ![](i/colors-344i_001.png) | 344° | ![](i/colors-344.png) | `#32000d`  `#66001b`  `#e5003d`  `#ff658e`  `#ff99f8` | ![](i/colors-344i.png) |
+| ![](i/colors-345_001.png)   ![](i/colors-345i_001.png) | 345° | ![](i/colors-345.png) | `#32000c`  `#660019`  `#e50039`  `#ff658c`  `#ff99f6` | ![](i/colors-345i.png) |
+| ![](i/colors-346_001.png)   ![](i/colors-346i_001.png) | 346° | ![](i/colors-346.png) | `#32000b`  `#660017`  `#e50035`  `#ff6589`  `#ff99f4` | ![](i/colors-346i.png) |
+| ![](i/colors-347_001.png)   ![](i/colors-347i_001.png) | 347° | ![](i/colors-347.png) | `#32000b`  `#660016`  `#e50031`  `#ff6587`  `#ff99f3` | ![](i/colors-347i.png) |
+| ![](i/colors-348_001.png)   ![](i/colors-348i_001.png) | 348° | ![](i/colors-348.png) | `#32000a`  `#660014`  `#e5002d`  `#ff6584`  `#ff99f1` | ![](i/colors-348i.png) |
+| ![](i/colors-349_001.png)   ![](i/colors-349i_001.png) | 349° | ![](i/colors-349.png) | `#320009`  `#660012`  `#e5002a`  `#ff6582`  `#ff99ef` | ![](i/colors-349i.png) |
+| ![](i/colors-350_001.png)   ![](i/colors-350i_001.png) | 350° | ![](i/colors-350.png) | `#320008`  `#660011`  `#e50026`  `#ff657f`  `#ff99ee` | ![](i/colors-350i.png) |
+| ![](i/colors-351_001.png)   ![](i/colors-351i_001.png) | 351° | ![](i/colors-351.png) | `#320007`  `#66000f`  `#e50022`  `#ff657c`  `#ff99ec` | ![](i/colors-351i.png) |
+| ![](i/colors-352_001.png)   ![](i/colors-352i_001.png) | 352° | ![](i/colors-352.png) | `#320006`  `#66000d`  `#e5001e`  `#ff657a`  `#ff99ea` | ![](i/colors-352i.png) |
+| ![](i/colors-353_001.png)   ![](i/colors-353i_001.png) | 353° | ![](i/colors-353.png) | `#320005`  `#66000b`  `#e5001a`  `#ff6577`  `#ff99e8` | ![](i/colors-353i.png) |
+| ![](i/colors-354_001.png)   ![](i/colors-354i_001.png) | 354° | ![](i/colors-354.png) | `#320005`  `#66000a`  `#e50016`  `#ff6575`  `#ff99e7` | ![](i/colors-354i.png) |
+| ![](i/colors-355_001.png)   ![](i/colors-355i_001.png) | 355° | ![](i/colors-355.png) | `#320004`  `#660008`  `#e50013`  `#ff6572`  `#ff99e5` | ![](i/colors-355i.png) |
+| ![](i/colors-356_001.png)   ![](i/colors-356i_001.png) | 356° | ![](i/colors-356.png) | `#320003`  `#660006`  `#e5000f`  `#ff6570`  `#ff99e3` | ![](i/colors-356i.png) |
+| ![](i/colors-357_001.png)   ![](i/colors-357i_001.png) | 357° | ![](i/colors-357.png) | `#320002`  `#660005`  `#e5000b`  `#ff656d`  `#ff99e2` | ![](i/colors-357i.png) |
+| ![](i/colors-358_001.png)   ![](i/colors-358i_001.png) | 358° | ![](i/colors-358.png) | `#320001`  `#660003`  `#e50007`  `#ff656b`  `#ff99e0` | ![](i/colors-358i.png) |
+| ![](i/colors-359_001.png)   ![](i/colors-359i_001.png) | 359° | ![](i/colors-359.png) | `#320000`  `#660001`  `#e50003`  `#ff6568`  `#ff99de` | ![](i/colors-359i.png) |
+
+---
+
+
+And to wrap up let's save the page to [COLORS.md](COLORS.md).
+
+``` ruby
+File.open( './COLORS.md', 'w:utf-8') { |f| f.write( buf ) }
+```
+
