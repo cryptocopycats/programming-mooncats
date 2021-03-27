@@ -2,7 +2,6 @@
 # to run use:
 #     ruby ./colors_cheat.rb
 
-$LOAD_PATH.unshift( '../mooncats/lib' )
 require 'mooncats'
 
 

@@ -170,7 +170,7 @@ cat = Mooncats::Image.new( design: 87, colors: normal )
 cat.save( "i/colors-209_087.png")
 
 cat = Mooncats::Image.new( design: 87, colors: inverted )
-cat.save( "i/color-209i_087.png")
+cat.save( "i/colors-209i_087.png")
 ```
 
 And voila!
