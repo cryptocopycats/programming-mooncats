@@ -18,9 +18,7 @@ Brooks Boyd (aka Midnight Lightning) writes:
 > "Hue", which goes from 0 to 360 degrees,
 > since it represents the "color wheel",
 > and mathematically, circles are often divided into 360 degrees.
->
 > [...]
->
 > MoonCats can either have a "standard" palette" or an "inverted
 > palette", and for each of the colors above I put in an example of
 > what a MoonCat would look like if they were exactly that hue, both
