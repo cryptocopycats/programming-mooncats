@@ -232,7 +232,7 @@ Brooks Boyd (aka Midnight Lightning) writes:
 > well-established, but halfway between "Yellow" and "Green" there's
 > plenty of other color names, and different preferences
 > on when people stop calling the color "yellow" and start calling it
-> "green" (take a look at [the color quix that XKCD did a while ago](https://blog.xkcd.com/2010/05/03/color-survey-results/)
+> "green" (take a look at [the color quiz that XKCD did a while ago](https://blog.xkcd.com/2010/05/03/color-survey-results/)
 > for more on this, and especially note how big the region people
 > called "green" is compared to how big the "yellow" region is).
 > I've given all those other "halfway" colors arbitrary names here
