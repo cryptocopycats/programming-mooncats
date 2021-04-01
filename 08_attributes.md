@@ -1,6 +1,22 @@
 # Statistics, Statistics, Statistics - Calculate Rarity & Popularity By ID, By Pose, Fur, Face, Facing & More - Inside the 25 440 MoonCat Population
 
 
+> Any idea of how much will worth mooncat in 6 months?
+>
+> No idea but mooncats is 1/20th the market cap of crypto punks, 
+> and crypto punk whales are selling punks to bag hundreds of cats 
+> from paper hands. I HODL! [You HODL! We HODL!  Let's corner the market and pump up the floor price!]
+>
+> Mooncats are off to a good (re)start I think...  floor hit 1.7 in like 2 days
+> showing us what's possible.
+>
+> Moon, cats, pixels, colors... what could go wrong?
+>
+> Big support line at 0.4 broke, we are finding new local lows at 0.3, 
+> but there is no convincing strength in reaction here either. 
+> Could go lower, levels like 0.2 or 0.1 are now possible.
+
+
 
 Crypto collectibles are all about rarity - the more rare the type or id of a mooncat the more valuable the ~24x24 pixel art in theory.
 
@@ -335,5 +351,9 @@ identicial colors and pose/face/fur BUT one facing left
 the other facing right.
 Or how about siblings, that is, mooncats
 rescued in the same block? How many sisters and brothers is the max?
+
+
+
+
 
 
