@@ -18,6 +18,8 @@ by [Gerald Bauer](https://github.com/geraldb), et al
 - [Inside k - The 2nd Byte in the 5-Byte Mooncat ID - All About Pose / Facing / Face / Fur](05_k.md)
 - [How MoonCats Are Colorized - Inside the Hue-based Color Wheel](06_colors.md)
 - [Build Your Own All-In-One Page Cheat Sheet with All Colors From Hue 0° to 359° Incl. the  Normal Derived Five Color Palette or the Inverted](07_colors_cheat.md)
+- [Statistics, Statistics, Statistics - Calculate Rarity & Popularity By ID, By Pose, Fur, Face, Facing & More - Inside the 25 440 MoonCat Population](08_attributes.md)
+
 
 
 To be continued...
