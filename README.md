@@ -25,6 +25,9 @@ by [Gerald Bauer](https://github.com/geraldb), et al
 To be continued...
 
 
+## Questions? Comments?
+
+Post them on the [mooncatrescue reddit](https://old.reddit.com/r/mooncatrescue). Thanks.
 
 
 ## License
