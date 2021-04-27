@@ -1,4 +1,4 @@
-# Draw Your Own MoonCat (or Garfield) Designs Using the Original Online Pixel Drawing Tool
+# Draw Your Own Mooncat (or Garfield) Designs Using the Original Online Pixel Drawing Tool
 
 
 The Mooncat developers (Ponderware) write:
@@ -44,7 +44,7 @@ Now you should see the mooncat pixel design.
 
 
 Yes, you can mint yourself
-MoonCats from the "raw" format.
+Mooncats from the "raw" format.
 Let's try using the default Garfield-themed
 colors from the Pixel Drawing Tool
 and the design #0 (Standing Smiling Pure Left):
