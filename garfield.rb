@@ -59,3 +59,21 @@ TXT
 cat = Mooncats::Image.new( design: design, colors: colors )
 cat.save( './i/garfield-008v2.png' )
 cat.zoom(4).save( './i/garfield-008v2x4.png' )
+
+
+
+
+colors = [ '#2a2825',   # color 1  -- "black-ish" outline color
+           '#f9cfad', '#f7bc56', '#cf5be8', '#45f0f4' ]
+
+cat = Mooncats::Image.new( design: design, colors: colors )
+cat.save( './i/sample-008v2-i.png' )
+cat.zoom(4).save( './i/sample-008v2x4-i.png' )
+
+
+colors = [ '#2a2825',   # color 1  -- "black-ish" outline color
+           '#b8916c', '#f4a792', '#44e192', '#fcdf35' ]
+
+cat = Mooncats::Image.new( design: design, colors: colors )
+cat.save( './i/sample-008v2-ii.png' )
+cat.zoom(4).save( './i/sample-008v2x4-ii.png' )

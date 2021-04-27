@@ -180,51 +180,51 @@ it easier to colorize Mooncats. The new color scheme:
 - #4 - pattern 2 (or accent) color
 - #5 - eyes color
 
+
 Let's try:
 
+- orangesoda (base color) - `#f7bc56`
+- royalpurple (pattern 1 or highlight color) - `#cf5be8`
+- peach (pattern 2 or accent color) - `#f9cfad`
+- cyan (eye color) - `#45f0f4`
 
+``` ruby
+colors = [ '#2a2825',   # color 1  -- "black-ish" outline color
+           '#f9cfad', '#f7bc56', '#cf5be8', '#45f0f4' ]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-And for some more fun here's the [design 3](original/003.txt) reformatted - ready to copy'n'paste:
-
-```
-0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 1 3 3 3 3 1 1 1 0 0
-0 0 0 0 0 0 0 0 0 0 1 3 1 1 3 3 3 1 0 0
-0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 1 3 1 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 3 1 1 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 3 3 1 0
-0 0 1 1 0 0 0 0 1 1 0 0 0 1 1 1 1 1 1 0
-0 1 3 1 0 0 0 1 3 1 0 0 1 1 3 3 3 3 1 1
-1 3 5 3 1 1 1 3 5 3 1 1 1 3 3 3 3 3 3 1
-1 3 3 3 3 3 3 3 3 3 1 1 3 3 3 3 3 3 3 1
-1 3 3 3 3 3 3 3 3 3 1 3 3 3 3 3 3 3 3 1
-1 3 3 1 3 3 3 1 3 3 1 3 3 3 3 3 3 3 1 1
-1 3 3 3 3 3 3 3 3 3 1 3 3 3 3 3 3 3 1 0
-1 3 3 4 3 5 3 4 3 3 1 3 3 3 3 4 3 3 1 0
-1 3 3 3 4 3 4 3 3 3 1 3 3 4 4 4 3 3 1 0
-0 1 3 3 3 3 3 3 3 1 1 3 4 4 4 1 3 3 3 1
-0 0 1 1 1 1 1 1 1 3 3 3 1 1 1 1 1 3 3 1
-0 1 1 3 3 3 3 3 3 3 1 1 1 3 3 1 1 3 1 1
-1 1 3 3 3 1 3 3 1 1 1 1 5 3 1 1 3 3 1 0
-1 5 3 1 1 1 5 1 1 0 0 1 1 1 1 5 3 1 1 0
-1 1 1 1 0 1 1 1 0 0 0 0 0 0 1 1 1 1 0 0
+cat = Mooncats::Image.new( design: design, colors: colors )
+cat.save( './sample-008v2-i.png' )
+cat.zoom(4).save( './sample-008v2x4-i.png' )
 ```
 
-![](https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/pixel-design-003.png)
+Or let's try:
 
+- salmon (base color) - `#f4a792`
+- swampgreen (pattern 1 or highlight color) - `#44e192`
+- sandalwood (pattern 2 or accent color) - `#b8916c`
+- gold (eye color) - `#fcdf35`
+
+
+``` ruby
+colors = [ '#2a2825',   # color 1  -- "black-ish" outline color
+           '#b8916c', '#f4a792', '#44e192', '#fcdf35' ]
+
+cat = Mooncats::Image.new( design: design, colors: colors )
+cat.save( './sample-008v2-ii.png' )
+cat.zoom(4).save( './sample-008v2x4-ii.png' )
+```
+
+Resulting in:
+
+![](i/sample-008v2-i.png)
+![](i/sample-008v2x4-i.png)
+
+![](i/sample-008v2-ii.png)
+![](i/sample-008v2x4-ii.png)
+
+
+
+
+Now go forth and draw your own designs. Yes, you can!
 
 
