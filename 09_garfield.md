@@ -14,7 +14,7 @@ source of the original example.
 
 Yes, you can read in the design into the pixel drawing tool online  (reformat required - every pixel row must be on its own line
 and all (color) numbers space separated).
-Example for [design 0](https://github.com/cryptocopycats/design.mooncats/blob/master/original/000.txt):
+Example for [design #0 (Standing Smiling Pure Left)](https://github.com/cryptocopycats/design.mooncats/blob/master/original/000.txt):
 
 ```
 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
@@ -47,7 +47,7 @@ Yes, you can mint yourself
 MoonCats from the "raw" format.
 Let's try using the default Garfield-themed
 colors from the Pixel Drawing Tool
-and the design #0:
+and the design #0 (Standing Smiling Pure Left):
 
 
 ``` ruby
@@ -88,7 +88,7 @@ Resulting in:
 
 Yes, you can turn any design into the "raw" format
 for easy cut-n-paste using the `Design#to_txt` method.
-Let's remake design 8 (Standing Smiling Spotted Left).
+Let's remake design #8 (Standing Smiling Spotted Left).
 
 ``` ruby
 design = Mooncats::Design.find( 8 )
@@ -128,15 +128,15 @@ Let's change the nose and mouth to use the outline (color #1).
 Let's change color #5 into the (exclusive) eyes color
 by adding a pixel each to the eyes
 and changing all other color #5 pixels to color #4.
-Can you see the difference?
+Can you spot the difference?
 
 ![](i/pixel-design-008v2.png)
 
 
 Let's use the new design. Click on the print button
-to get an up-to-date copy to cut-n-paste:
+to get an up-to-date version of the "raw" pixel format to cut-n-paste:
 
-```
+``` ruby
 design =  Mooncats::Design.parse( <<TXT )
 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
 0 1 3 1 0 0 0 1 2 1 0 0 0 0 0 0 0 0 0 0 0
@@ -164,8 +164,8 @@ cat.zoom(4).save( './garfield-008v2x4.png' )
 
 Voila!
 
-![](i/garfield-000v2.png)
-![](i/garfield-000v2x4.png)
+![](i/garfield-008v2.png)
+![](i/garfield-008v2x4.png)
 
 
 What's the point?
